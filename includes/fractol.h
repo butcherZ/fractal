@@ -45,8 +45,6 @@ typedef struct	s_mlx
   t_img		img;
 }				t_mlx;
 
-
-
 /*
 **  set up env for image set_up_image.c
 */

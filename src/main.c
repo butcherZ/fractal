@@ -25,12 +25,12 @@ int			key_down(int keycode, t_mlx *map)
 void init_mandelbrot(t_fractal *f)
 {
 	f->MinRe = -2.0;
-	f->MaxRe = 1.0;
+	f->MaxRe = 0.1; //change to zoom
 	f->MinIm = -1.2;
 	f->MaxIm = f->MinIm + (f->MaxRe - f->MinRe) * IMG_HEIGHT / IMG_WIDTH;
 	f->Re_factor = (f->MaxRe - f->MinRe) / (IMG_WIDTH - 1);
 	f->Im_factor = (f->MaxIm - f->MinIm) / (IMG_HEIGHT - 1);
-	f->MaxIterations = 500;
+	f->MaxIterations = 100;
 }
 
 unsigned long createRGB(int r, int g, int b)
@@ -38,6 +38,13 @@ unsigned long createRGB(int r, int g, int b)
     return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 /*f(z) = z2 + c;*/
+
+double	square(double nb)
+{
+		nb = nb * nb;
+		return (nb);
+}
+
 void mandelbrot(t_mlx *map)
 {
 	t_fractal f;
@@ -48,8 +55,8 @@ void mandelbrot(t_mlx *map)
 	while(y < IMG_HEIGHT)
 	{
 	    	f.c_im = f.MaxIm - y * f.Im_factor;
-				int x = 0;
-	    while(x<IMG_WIDTH)
+			int x = 0;
+	    while(x < IMG_WIDTH)
 	    {
 	        f.c_re = f.MinRe + x * f.Re_factor;
 					f.z_re = f.c_re;
@@ -58,8 +65,8 @@ void mandelbrot(t_mlx *map)
 					int n = 0;
 	        while(n < f.MaxIterations)
 	        {
-							f.z_re_square = f.z_re * f.z_re;
-							f.z_im_square = f.z_im * f.z_im;
+					f.z_re_square = f.z_re * f.z_re;
+					f.z_im_square = f.z_im * f.z_im;
 	            if(f.z_re_square + f.z_im_square > 4)
 	            {
 	                f.isInside = 0;
@@ -67,18 +74,22 @@ void mandelbrot(t_mlx *map)
 	            }
 	            f.z_im = 2 * f.z_re * f.z_im + f.c_im;
 	            f.z_re = f.z_re_square - f.z_im_square + f.c_re;
-							n++;
-					}
-					printf("n is %d\n", n);
-	        if(f.isInside == 1)
-					{
-					  img_put_pixel(map, x, y, 0);
-					}
-					else
-					{
-						img_put_pixel(map, x, y, createRGB(0xFF, 0xFF, 0xFF));
-					}
-					x++;
+				n++;
+			}
+			float t = (float)n / (float)f.MaxIterations;
+//https://solarianprogrammer.com/2013/02/28/mandelbrot-set-cpp-11/
+			int r = (int)(9*(1-t)*t*t*t*255);
+			int g = (int)(15*(1-t)*(1-t)*t*t*255);
+ 			int b =  (int)(8.5*(1-t)*(1-t)*(1-t)*t*255);
+		    if(f.isInside == 1)
+			{
+				  img_put_pixel(map, x, y, 0);
+			}
+			else
+			{
+				img_put_pixel(map, x, y, createRGB(r, g, b));
+			}
+			x++;
 	    }
 				y++;
 	}
