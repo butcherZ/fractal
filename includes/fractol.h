@@ -35,14 +35,39 @@ typedef	struct	s_fractal
 	double z_im_square;
 	int isInside;
 	int MaxIterations;
+	int n;
 }								t_fractal;
 
+typedef struct 	s_factor
+{
+	double zoom;
+	int		 x_translation;
+	int		 y_translation;
+}								t_factor;
+
+typedef struct  s_coordinate
+{
+	int x;
+	int y;
+}								t_coordinate;
+typedef	struct  s_color
+{
+	int r;
+	int g;
+	int b;
+	float t;
+}								t_color;
 typedef struct	s_mlx
 {
 	void		*mlx;
 	void		*win;
-	int			color;
+	//int			color;
   t_img		img;
+	t_fractal	f;
+	t_factor fac;
+	t_color color;
+	t_coordinate *coord;
+	int total; //total pixels;
 }				t_mlx;
 
 /*
