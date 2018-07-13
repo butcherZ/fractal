@@ -43,6 +43,8 @@ typedef struct 	s_factor
 	double zoom;
 	int		 x_translation;
 	int		 y_translation;
+	int		 increase_iterations;
+	int 	 count;
 }								t_factor;
 
 typedef struct  s_coordinate
@@ -67,6 +69,8 @@ typedef struct	s_mlx
 	t_factor fac;
 	t_color color;
 	t_coordinate *coord;
+	int			trigger;
+	int			index;
 	int total; //total pixels;
 }				t_mlx;
 
