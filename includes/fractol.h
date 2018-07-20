@@ -41,8 +41,8 @@ typedef	struct	s_fractal
 typedef struct 	s_factor
 {
 	double zoom;
-	int		 x_translation;
-	int		 y_translation;
+	double		 x_translation;
+	double		 y_translation;
 	int		 increase_iterations;
 	int 	 count;
 }								t_factor;

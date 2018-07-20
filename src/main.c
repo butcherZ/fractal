@@ -19,7 +19,7 @@ void init_mandelbrot(t_mlx *map)
 	map->f.MaxRe = 1.0; // RIGHT change to zoom
 	map->f.MinIm = -1.2; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	map->f.MaxIterations = 80;
+	map->f.MaxIterations = 30;
 	map->fac.count = 1;
 }
 
@@ -43,12 +43,8 @@ void get_color(t_mlx *map)
 	map->color.g = (int)(15*(1-t)*(1-t)*t*t*255);
 	map->color.b =  (int)(8.5*(1-t)*(1-t)*(1-t)*t*255);
 }
-void mandelbrot(t_mlx *map) //this one is julia
+/*void mandelbrot(t_mlx *map) //this one is julia
 {
-	t_coordinate *coord;
-	int count = 0;
-	if (!(coord = malloc(sizeof(t_coordinate) * IMG_WIDTH * IMG_HEIGHT)))
-		exit(1);
 	int i = 0;
 	int y = 0;
 
@@ -67,14 +63,15 @@ void mandelbrot(t_mlx *map) //this one is julia
 			int x = 0;
 	    while(x < IMG_WIDTH)
 	    {
-					map->f.z_re = 1.5 * (x - IMG_WIDTH / 2) / (0.5 * IMG_WIDTH);
-					map->f.z_im = (y - IMG_HEIGHT / 2) / (0.5 * IMG_HEIGHT);
+				 	//map->f.c_re = map->f.MinRe + x * map->f.Re_factor;
+					map->f.z_re = 1.5 * (x - IMG_WIDTH / 2) / (0.5 * IMG_WIDTH * map->fac.zoom);// + map->fac.x_translation;
+					map->f.z_im = (y - IMG_HEIGHT / 2) / (0.5 * IMG_HEIGHT * map->fac.zoom);// + map->fac.y_translation;
 	       	map->f.isInside = 1;
 					map->f.n = 0;
 	        while(map->f.n < map->f.MaxIterations)
 	        {
-						map->f.z_re_square = map->f.z_re * map->f.z_re;
-						map->f.z_im_square = map->f.z_im * map->f.z_im;
+							map->f.z_re_square = map->f.z_re * map->f.z_re;
+							map->f.z_im_square = map->f.z_im * map->f.z_im;
 	            if(map->f.z_re_square + map->f.z_im_square > 4)
 	            {
 	               map->f.isInside = 0;
@@ -91,34 +88,23 @@ void mandelbrot(t_mlx *map) //this one is julia
 			{
 					if (i < IMG_WIDTH * IMG_HEIGHT)
 					{
-						coord[i].x = x;
-						coord[i].y = y;
-						img_put_pixel(map, coord[i].x, coord[i].y, createRGB(map->color.r, map->color.g, map->color.b));
-
-					//	printf("coord x is %d, coord y is %d\n", coord[i].x, coord[i].y);
-						//printf("i is %d\n", i);
-						i++;
+							img_put_pixel(map, x, y, createRGB(map->color.r, map->color.g, map->color.b));
+							i++;
 					}
-					map->coord = coord;
 					map->total = i;
 			}
-		//	printf("coord x is %d, coord y is %d\n", coord[i].x, coord[i].y);
 			x++;
 	    }
 			y++;
 	}
-	//free(coord);
-}
+}*/
 
-/*void mandelbrot(t_mlx *map)
+void mandelbrot(t_mlx *map)
 {
-	t_coordinate *coord;
-	int count = 0;
-	if (!(coord = malloc(sizeof(t_coordinate) * IMG_WIDTH * IMG_HEIGHT)))
-		exit(1);
 	int i = 0;
 	int y = 0;
-
+	float cr = 0;
+	float ci = -0.8;
 	map->f.Re_factor = (map->f.MaxRe - map->f.MinRe) / (IMG_WIDTH - 1);
 	map->f.Im_factor = (map->f.MaxIm - map->f.MinIm) / (IMG_HEIGHT - 1);
 
@@ -135,8 +121,8 @@ void mandelbrot(t_mlx *map) //this one is julia
 	    while(x < IMG_WIDTH)
 	    {
 	        map->f.c_re = map->f.MinRe + x * map->f.Re_factor;
-					map->f.z_re = map->f.c_re;
-					map->f.z_im = map->f.c_im;
+					map->f.z_re = map->f.c_re; //real part is x
+					map->f.z_im = map->f.c_im; //imaginary part is y
 	       map->f.isInside = 1;
 					map->f.n = 0;
 	        while(map->f.n < map->f.MaxIterations)
@@ -148,8 +134,8 @@ void mandelbrot(t_mlx *map) //this one is julia
 	               map->f.isInside = 0;
 	                break;
 	            }
-	            map->f.z_im = 2 * map->f.z_re * map->f.z_im + map->f.c_im;
-	            map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.c_re;
+	            map->f.z_im = 2 * map->f.z_re * map->f.z_im + map->f.c_im; // + cr change to julia
+	            map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.c_re; // + ci change to julia
 							map->f.n++;
 					}
 			get_color(map);
@@ -159,15 +145,12 @@ void mandelbrot(t_mlx *map) //this one is julia
 			{
 					if (i < IMG_WIDTH * IMG_HEIGHT)
 					{
-						coord[i].x = x;
-						coord[i].y = y;
-						img_put_pixel(map, coord[i].x, coord[i].y, createRGB(map->color.r, map->color.g, map->color.b));
+						img_put_pixel(map, x, y, createRGB(map->color.r, map->color.g, map->color.b));
 
 					//	printf("coord x is %d, coord y is %d\n", coord[i].x, coord[i].y);
 						//printf("i is %d\n", i);
 						i++;
 					}
-					map->coord = coord;
 					map->total = i;
 			}
 		//	printf("coord x is %d, coord y is %d\n", coord[i].x, coord[i].y);
@@ -176,7 +159,7 @@ void mandelbrot(t_mlx *map) //this one is julia
 			y++;
 	}
 	//free(coord);
-}*/
+}
 
 void draw(t_mlx *map)
 {
@@ -200,7 +183,6 @@ int			mlx_while(t_mlx *map)
 			map->f.MaxIterations += 1;
 		if (map->f.MaxIterations == 30)
 			map->f.MaxIterations -= 1;
-		printf("iterations is %d\n", map->f.MaxIterations);
 		empty(map);
 		mandelbrot(map);
 		mlx_put_image_to_window(map->mlx, map->win,
@@ -236,16 +218,19 @@ int			key_long_press(int keycode, t_mlx *map)
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	printf("keycode is %d\n", keycode);
-	if (keycode == 19)
+	if (keycode == 18)
 	{
+		map->fac.zoom *= 1.2;
+		map->fac.count += 1;
 		map->f.MinRe -= real_diff;
 		map->f.MaxRe += real_diff;
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm += img_diff;
 	}
-	if (keycode == 18)
+	if (keycode == 19)
 	{
-		map->fac.count+= 1;
+		map->fac.zoom /= 1.2;
+		map->fac.count -= 1;
 		map->f.MinRe += real_diff;
 		map->f.MaxRe -= real_diff;
 		map->f.MinIm += img_diff;
@@ -253,21 +238,30 @@ int			key_long_press(int keycode, t_mlx *map)
 	}
 	if (keycode == 123)
 	{
+		//map->fac.x_translation += 0.003;
+		printf("min re is %f, max re is %f\n", map->f.MinRe,map->f.MaxRe);
+		//map->f.MinRe++;
+	//	map->f.MaxRe++;
 		map->f.MinRe += real_diff;
 		map->f.MaxRe += real_diff;
 	}
 	if (keycode == 124)
 	{
+		//map->fac.x_translation -= 0.003;
+		//map->f.MinRe--;
+		//map->f.MaxRe--;
 		map->f.MinRe -= real_diff;
 		map->f.MaxRe -= real_diff;
 	}
 	if (keycode == 125)
 	{
+		//map->fac.y_translation += 0.003;
 		map->f.MinIm += img_diff;
 		map->f.MaxIm += img_diff;
 	}
 	if (keycode == 126)
 	{
+		//map->fac.y_translation -= 0.003;
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm -= img_diff;
 	}
@@ -283,8 +277,8 @@ int			main(void)
   t_mlx	map;
 	map.index = 0;
 	map.trigger = 0;
-	map.fac.y_translation = 1;
-	map.fac.x_translation = 1;
+	map.fac.y_translation = 0;
+	map.fac.x_translation = 0;
 	map.fac.zoom = 1;
 	map.fac.count = 0;
 	map.fac.increase_iterations = 1;
