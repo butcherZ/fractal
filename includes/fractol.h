@@ -71,7 +71,9 @@ typedef struct	s_mlx
 	t_coordinate *coord;
 	int			trigger;
 	int			index;
-	int total; //total pixels;
+	int 		total; //total pixels;
+	char    *argv;
+	int			input;
 }				t_mlx;
 
 /*
