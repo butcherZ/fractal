@@ -21,22 +21,33 @@ void init_mandelbrot(t_mlx *map)
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
 	map->f.MaxIterations = 50;
 	map->fac.count = 1;
-	//map->cr = 0;
-	//map->ci = 0;
+	map->f.cr = 0;
+	map->f.ci = 0;
 }
 
 void init_julia(t_mlx *map)
 {
 	map->f.MinRe = -2.0; //LEFT change to zoom
-	map->f.MaxRe = 1.0; // RIGHT change to zoom
-	map->f.MinIm = -1.2; // TOP
+	map->f.MaxRe = 1.7; // RIGHT change to zoom
+	map->f.MinIm = -1.3; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
 	map->f.MaxIterations = 50;
 	map->fac.count = 1;
-	//map->cr = 0;
-	//map->ci = -0.8;
+	map->f.cr = -0.70176;
+	map->f.ci = -0.3842;
 }
 
+void init_burningship(t_mlx *map)
+{
+	map->f.MinRe = -2.0; //LEFT change to zoom
+	map->f.MaxRe = 1.0; // RIGHT change to zoom
+	map->f.MinIm = -0.6; // TOP
+	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
+	map->f.MaxIterations = 100;
+	map->fac.count = 1;
+	map->f.cr = 0;
+	map->f.ci = 0;
+}
 unsigned long createRGB(int r, int g, int b)
 {
     return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
@@ -57,68 +68,23 @@ void get_color(t_mlx *map)
 	map->color.g = (int)(15*(1-t)*(1-t)*t*t*255);
 	map->color.b =  (int)(8.5*(1-t)*(1-t)*(1-t)*t*255);
 }
-/*void mandelbrot(t_mlx *map) //this one is julia
+void draw(t_mlx *map, int x, int y)
 {
-	int i = 0;
-	int y = 0;
-
-	map->f.Re_factor = (map->f.MaxRe - map->f.MinRe) / (IMG_WIDTH - 1);
-	map->f.Im_factor = (map->f.MaxIm - map->f.MinIm) / (IMG_HEIGHT - 1);
-	map->f.c_re = 0;
-	map->f.c_im = -0.8; //chang these two values to get various julia
-	if (map->fac.count % 30 == 0)
-	{
-			map->f.MaxIterations *= 1.2;
-			printf("iterations is %d\n", map->f.MaxIterations);
-			printf("count is %d\n", map->fac.count);
-	}
-	while(y < IMG_HEIGHT)
-	{
-			int x = 0;
-	    while(x < IMG_WIDTH)
-	    {
-				 	//map->f.c_re = map->f.MinRe + x * map->f.Re_factor;
-					map->f.z_re = 1.5 * (x - IMG_WIDTH / 2) / (0.5 * IMG_WIDTH * map->fac.zoom);// + map->fac.x_translation;
-					map->f.z_im = (y - IMG_HEIGHT / 2) / (0.5 * IMG_HEIGHT * map->fac.zoom);// + map->fac.y_translation;
-	       	map->f.isInside = 1;
-					map->f.n = 0;
-	        while(map->f.n < map->f.MaxIterations)
-	        {
-							map->f.z_re_square = map->f.z_re * map->f.z_re;
-							map->f.z_im_square = map->f.z_im * map->f.z_im;
-	            if(map->f.z_re_square + map->f.z_im_square > 4)
-	            {
-	               map->f.isInside = 0;
-	                break;
-	            }
-	            map->f.z_im = 2 * map->f.z_re * map->f.z_im + map->f.c_im;
-	            map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.c_re;
-							map->f.n++;
-					}
-			get_color(map);
-// //https://solarianprogrammer.com/2013/02/28/mandelbrot-set-cpp-11/
-
-		  if(map->f.isInside != 1)
+			int i = 0;
+			if(map->f.isInside != 1)
 			{
 					if (i < IMG_WIDTH * IMG_HEIGHT)
 					{
-							img_put_pixel(map, x, y, createRGB(map->color.r, map->color.g, map->color.b));
-							i++;
+						img_put_pixel(map, x, y, createRGB(map->color.r, map->color.g, map->color.b));
+						i++;
 					}
 					map->total = i;
 			}
-			x++;
-	    }
-			y++;
-	}
-}*/
+}
 
 void escape_time(t_mlx *map) // this is burning ship
 {
-	int i = 0;
 	int y = 0;
-	float cr = -0.70176;
-	float ci = -0.3842;
 	map->f.Re_factor = (map->f.MaxRe - map->f.MinRe) / (IMG_WIDTH - 1);
 	map->f.Im_factor = (map->f.MaxIm - map->f.MinIm) / (IMG_HEIGHT - 1);
 
@@ -145,13 +111,11 @@ void escape_time(t_mlx *map) // this is burning ship
 						map->f.z_im_square = map->f.z_im * map->f.z_im;
 						if (map->input == 1)
 						{
-							map->f.z_im = 2 * map->f.z_re * map->f.z_im + /*map->f.c_im +*/ ci; // + cr change to julia
-							map->f.z_re = map->f.z_re_square - map->f.z_im_square + /*map->f.c_re + */cr; // + ci change to julia
+							map->f.z_im = 2 * map->f.z_re * map->f.z_im + /*map->f.c_im +*/ map->f.ci; // + cr change to julia
+							map->f.z_re = map->f.z_re_square - map->f.z_im_square + /*map->f.c_re + */map->f.cr; // + ci change to julia
 						}
 						else if (map->input == 2)
 						{
-							//printf("something");
-							//map->input = -1;
 							map->f.z_im = 2 * map->f.z_re * map->f.z_im + map->f.c_im; // + cr change to julia
 							map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.c_re; // + ci change to julia
 						}
@@ -169,36 +133,11 @@ void escape_time(t_mlx *map) // this is burning ship
 					}
 			get_color(map);
 // //https://solarianprogrammer.com/2013/02/28/mandelbrot-set-cpp-11/
-
-		  if(map->f.isInside != 1)
-			{
-					if (i < IMG_WIDTH * IMG_HEIGHT)
-					{
-						img_put_pixel(map, x, y, createRGB(map->color.r, map->color.g, map->color.b));
-
-					//	printf("coord x is %d, coord y is %d\n", coord[i].x, coord[i].y);
-						//printf("i is %d\n", i);
-						i++;
-					}
-					map->total = i;
-			}
-		//	printf("coord x is %d, coord y is %d\n", coord[i].x, coord[i].y);
+			draw(map, x, y);
 			x++;
 	    }
 			y++;
 	}
-	//free(coord);
-}
-
-void draw(t_mlx *map)
-{
-			int i = 0;
-			while (i < map->total)
-			{
-				img_put_pixel(map, map->coord[i].x + map->fac.x_translation, map->coord[i].y + map->fac.y_translation, createRGB(map->color.r, map->color.g, map->color.b));
-				i++;
-
-			}
 }
 
 int			mlx_while(t_mlx *map)
@@ -249,7 +188,6 @@ int			key_long_press(int keycode, t_mlx *map)
 	printf("keycode is %d\n", keycode);
 	if (keycode == 18)
 	{
-		map->fac.zoom *= 1.2;
 		map->fac.count += 1;
 		map->f.MinRe -= real_diff;
 		map->f.MaxRe += real_diff;
@@ -258,7 +196,6 @@ int			key_long_press(int keycode, t_mlx *map)
 	}
 	if (keycode == 19)
 	{
-		map->fac.zoom /= 1.2;
 		map->fac.count -= 1;
 		map->f.MinRe += real_diff;
 		map->f.MaxRe -= real_diff;
@@ -267,30 +204,21 @@ int			key_long_press(int keycode, t_mlx *map)
 	}
 	if (keycode == 123)
 	{
-		//map->fac.x_translation += 0.003;
-		printf("min re is %f, max re is %f\n", map->f.MinRe,map->f.MaxRe);
-		//map->f.MinRe++;
-	//	map->f.MaxRe++;
 		map->f.MinRe += real_diff;
 		map->f.MaxRe += real_diff;
 	}
 	if (keycode == 124)
 	{
-		//map->fac.x_translation -= 0.003;
-		//map->f.MinRe--;
-		//map->f.MaxRe--;
 		map->f.MinRe -= real_diff;
 		map->f.MaxRe -= real_diff;
 	}
 	if (keycode == 125)
 	{
-		//map->fac.y_translation += 0.003;
 		map->f.MinIm += img_diff;
 		map->f.MaxIm += img_diff;
 	}
 	if (keycode == 126)
 	{
-		//map->fac.y_translation -= 0.003;
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm -= img_diff;
 	}
@@ -351,11 +279,9 @@ int			main(int argc, char *argv[])
 		else if(map.input == 2)
 				init_mandelbrot(&map);
 		else if(map.input == 3)
-					printf("3");
-				//init_burningship(&map);
+				init_burningship(&map);
 	}
 	init_image(&map);
-	//init_mandelbrot(&map);
 	escape_time(&map);
 	//draw(&map);
 	mlx_key_hook(map.win, key_down, &map);
