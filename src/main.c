@@ -82,62 +82,80 @@ void draw(t_mlx *map, int x, int y)
 			}
 }
 
-void escape_time(t_mlx *map) // this is burning ship
+void check_map(t_mlx *map)
 {
-	int y = 0;
+	map->f.z_re_square = map->f.z_re * map->f.z_re;
+	map->f.z_im_square = map->f.z_im * map->f.z_im;
+	if (map->input == JULIA)
+	{
+		map->f.z_im = 2 * map->f.z_re * map->f.z_im + map->f.ci;
+		map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.cr;
+	}
+	else if (map->input == MANDELBROT)
+	{
+		map->f.z_im = 2 * map->f.z_re * map->f.z_im + map->f.c_im;
+		map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.c_re;
+	}
+	else if (map->input == BURNINGSHIP)
+	{
+		map->f.z_im = 2 * fabs(map->f.z_re * map->f.z_im) - map->f.c_im;
+		map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.c_re;
+	}
+}
+
+void init(t_mlx *map)
+{
+	map->f.c_re = map->f.MinRe + map->img.x * map->f.Re_factor;
+	map->f.z_re = map->f.c_re; //real part is x
+	map->f.z_im = map->f.c_im; //imaginary part is y
+	map->f.isInside = 1;
+	map->f.n = 0;
+}
+void set_factor(t_mlx *map)
+{
+	map->img.y = 0;
 	map->f.Re_factor = (map->f.MaxRe - map->f.MinRe) / (IMG_WIDTH - 1);
 	map->f.Im_factor = (map->f.MaxIm - map->f.MinIm) / (IMG_HEIGHT - 1);
+}
 
+void loop_through(t_mlx *map)
+{
+	while(map->img.y < IMG_HEIGHT)
+	{
+			map->f.c_im = map->f.MaxIm - map->img.y * map->f.Im_factor;
+			map->img.x = 0;
+			while(map->img.x < IMG_WIDTH)
+			{
+					init(map);
+					while(map->f.n < map->f.MaxIterations)
+					{
+						check_map(map);
+						if(map->f.z_re_square + map->f.z_im_square > 4)
+						{
+								 map->f.isInside = 0;
+								 break;
+						 }
+						 map->f.n++;
+					}
+			get_color(map);
+// //https://solarianprogrammer.com/2013/02/28/mandelbrot-set-cpp-11/
+			draw(map, map->img.x , map->img.y);
+			map->img.x++;
+			}
+			map->img.y++;
+	}
+}
+
+void escape_time(t_mlx *map) // this is burning ship
+{
+	set_factor(map);
 	if (map->fac.count % 30 == 0)
 	{
 			map->f.MaxIterations *= 1.2;
 			printf("iterations is %d\n", map->f.MaxIterations);
 			printf("count is %d\n", map->fac.count);
 	}
-	while(y < IMG_HEIGHT)
-	{
-	  	map->f.c_im = map->f.MaxIm - y * map->f.Im_factor;
-			int x = 0;
-	    while(x < IMG_WIDTH)
-	    {
-	        map->f.c_re = map->f.MinRe + x * map->f.Re_factor;
-					map->f.z_re = map->f.c_re; //real part is x
-					map->f.z_im = map->f.c_im; //imaginary part is y
-	       map->f.isInside = 1;
-					map->f.n = 0;
-	        while(map->f.n < map->f.MaxIterations)
-	        {
-						map->f.z_re_square = map->f.z_re * map->f.z_re;
-						map->f.z_im_square = map->f.z_im * map->f.z_im;
-						if (map->input == 1)
-						{
-							map->f.z_im = 2 * map->f.z_re * map->f.z_im + /*map->f.c_im +*/ map->f.ci; // + cr change to julia
-							map->f.z_re = map->f.z_re_square - map->f.z_im_square + /*map->f.c_re + */map->f.cr; // + ci change to julia
-						}
-						else if (map->input == 2)
-						{
-							map->f.z_im = 2 * map->f.z_re * map->f.z_im + map->f.c_im; // + cr change to julia
-							map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.c_re; // + ci change to julia
-						}
-						else if (map->input == 3)
-						{
-							map->f.z_im = 2 * fabs(map->f.z_re * map->f.z_im) - map->f.c_im;
-							map->f.z_re = map->f.z_re_square - map->f.z_im_square + map->f.c_re;
-						}
-	          if(map->f.z_re_square + map->f.z_im_square > 4)
-	          {
-	               map->f.isInside = 0;
-	                break;
-	           }
-						 map->f.n++;
-					}
-			get_color(map);
-// //https://solarianprogrammer.com/2013/02/28/mandelbrot-set-cpp-11/
-			draw(map, x, y);
-			x++;
-	    }
-			y++;
-	}
+	loop_through(map);
 }
 
 int			mlx_while(t_mlx *map)
@@ -238,11 +256,11 @@ void		check_input(t_mlx *map)
 	str2 = "mandelbrot";
 	str3 = "burningship";
 	if (ft_strcmp(map->argv, str1) == 0)
-			map->input = 1;
+			map->input = JULIA;
 	else if (ft_strcmp(map->argv, str2) == 0)
-			map->input = 2;
+			map->input = MANDELBROT;
 	else if (ft_strcmp(map->argv, str3) == 0)
-			map->input = 3;
+			map->input = BURNINGSHIP;
 	else
 	{
 			ft_putstr("invalid argument");

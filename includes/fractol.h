@@ -10,6 +10,10 @@
 # define IMG_WIDTH WIN_WIDTH
 # define IMG_HEIGHT WIN_HEIGHT
 
+#	define JULIA 1
+# define MANDELBROT 2
+# define BURNINGSHIP 3
+
 typedef struct	s_img
 {
 	void		*img_ptr;
@@ -17,6 +21,8 @@ typedef struct	s_img
 	int			bits_per_pixel;
 	int			size_line;
 	int			endian;
+	int 		x;
+	int			y;
 }				t_img;
 
 typedef	struct	s_fractal
@@ -49,11 +55,7 @@ typedef struct 	s_factor
 	int 	 count;
 }								t_factor;
 
-typedef struct  s_coordinate
-{
-	int x;
-	int y;
-}								t_coordinate;
+
 typedef	struct  s_color
 {
 	int r;
@@ -70,7 +72,6 @@ typedef struct	s_mlx
 	t_fractal	f;
 	t_factor fac;
 	t_color color;
-	t_coordinate *coord;
 	int			trigger;
 	int			index;
 	int 		total; //total pixels;
