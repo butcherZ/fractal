@@ -244,22 +244,6 @@ int			key_long_press(int keycode, t_mlx *map)
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	printf("keycode is %d\n", keycode);
-	if (keycode == 19)
-	{
-		map->fac.count -= 1;
-		map->f.MinRe -= real_diff;
-		map->f.MaxRe += real_diff;
-		map->f.MinIm -= img_diff;
-		map->f.MaxIm += img_diff;
-	}
-	if (keycode == 18)
-	{
-		map->fac.count += 1;
-		map->f.MinRe += real_diff;
-		map->f.MaxRe -= real_diff;
-		map->f.MinIm += img_diff;
-		map->f.MaxIm -= img_diff;
-	}
 	if (keycode == 123)
 	{
 		map->f.MinRe += real_diff;
@@ -279,22 +263,6 @@ int			key_long_press(int keycode, t_mlx *map)
 	{
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm -= img_diff;
-	}
-	if (keycode == 12)
-	{
-		if(map->input == JULIA)
-		{
-			map->f.cr += 0.01;
-			map->f.ci += 0.01;
-		}
-	}
-	if (keycode == 13)
-	{
-		if(map->input == JULIA)
-		{
-			map->f.cr -= 0.01;
-			map->f.ci -= 0.01;
-		}
 	}
 	empty(map);
 	escape_time(map);
@@ -323,11 +291,72 @@ void		check_input(t_mlx *map)
 			map->input = 0;
 	}
 }
+int		 mouse_move(int x, int y, t_mlx *map)
+{
+	printf("x is %d, y is %d\n", x, y);
+	/*x range is 0 to IMG_WIDTH
+	y range is 0 to IMG_HEIGHT
+	ci range is (-2 to 2)
+	cr range is (-2 to 2)
+	when x = 0, cr = -2
+		x = IMG_WIDTH , cr = 2
+	y = 0, ci = -2
+		y = IMG_HEIGHT, cr = 2
+	whenever x + 1, cr + abs(-2 / IMG_WIDTH)
+			y + 1, ci + abs(-2 / IMG_HEIGHT)
+			x + 1 = cr + abs(-2 / IMG_WIDTH)
+			x = 0, cr = -2
+			x = 10, cr = -2 + 10 * abs(2 / IMG_WIDTH)*/
+	if(map->input == JULIA && map->freez == 0)
+	{
+		map->f.cr = (double)x * 2 / IMG_WIDTH - 2;
+		map->f.ci = (double)y * 2 / IMG_HEIGHT -2;
+	}
+	printf("cr is %f, ci is %f\n", map->f.cr, map->f.ci);
+	empty(map);
+	escape_time(map);
+	mlx_put_image_to_window(map->mlx, map->win,
+			map->img.img_ptr, 0, 0);
+	return (1);
+}
 
+int 	mouse_wheel(int button, int x, int y, t_mlx *map)
+{
+	printf("button is %d\n", button);
+	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
+	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
+	if (button == 5)
+	{
+		map->fac.count -= 1;
+		map->f.MinRe -= real_diff;
+		map->f.MaxRe += real_diff;
+		map->f.MinIm -= img_diff;
+		map->f.MaxIm += img_diff;
+		printf("Min im is %f\n", map->f.MaxIm);
+	}
+	if (button == 4)
+	{
+		map->fac.count += 1;
+		map->f.MinRe += real_diff;
+		map->f.MaxRe -= real_diff;
+		map->f.MinIm += img_diff;
+		map->f.MaxIm -= img_diff;
+	}
+	if (button == 1)
+	{
+			map->freez= (map->freez + 1) % 2;
+	}
+	empty(map);
+	escape_time(map);
+	mlx_put_image_to_window(map->mlx, map->win,
+			map->img.img_ptr, 0, 0);
+	return(1);
+}
 int			main(int argc, char *argv[])
 {
   t_mlx	map;
 	map.index = 0;
+	map.freez = 0;
 	map.trigger = 0;
 	map.fac.y_translation = 0;
 	map.fac.x_translation = 0;
@@ -355,6 +384,8 @@ int			main(int argc, char *argv[])
 	//draw(&map);
 	mlx_key_hook(map.win, key_down, &map);
 	mlx_hook(map.win, 2, 0, key_long_press, &map);
+	mlx_hook(map.win, 4, 0, mouse_wheel, &map);
+	mlx_hook(map.win, 6, 0, mouse_move, &map);
 	mlx_put_image_to_window(map.mlx, map.win,
 			map.img.img_ptr, 0, 0);
 	mlx_loop_hook(map.mlx, mlx_while, &map);

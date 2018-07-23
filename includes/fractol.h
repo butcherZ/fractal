@@ -78,6 +78,7 @@ typedef struct	s_mlx
 	char    	*argv;
 	int			input;
 	int			animated;
+	int			freez;
 }				t_mlx;
 
 /*
