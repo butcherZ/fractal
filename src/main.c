@@ -66,7 +66,7 @@ void	set_max_iterations(t_mlx *map)
 			map->f.MaxIterations = 1;
 	}
 	else if (map->trigger == 0 && map->animated == 0)
-		map->f.MaxIterations = 50;
+		map->f.MaxIterations = 200;
 }
 
 void		init_fractol(t_mlx *map)
@@ -206,7 +206,7 @@ int			mlx_while(t_mlx *map)
 	//map->f.MaxIterations = 1;
 	if (map->trigger == 1 && map->index > 200)
 	{
-		printf("MaxIterations is %d\n", map->f.MaxIterations);
+	//	printf("MaxIterations is %d\n", map->f.MaxIterations);
 		map->index = 0;
 		empty(map);
 		escape_time(map);
@@ -218,7 +218,7 @@ int			mlx_while(t_mlx *map)
 
 int			key_down(int keycode, t_mlx *map)
 {
-	if (keycode == 50)
+	if (keycode == 10)
 	{
 		init_fractol(map);
 		map->animated = 0;
@@ -243,7 +243,7 @@ int			key_long_press(int keycode, t_mlx *map)
 {
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
-	printf("keycode is %d\n", keycode);
+	//printf("keycode is %d\n", keycode);
 	if (keycode == 123)
 	{
 		map->f.MinRe += real_diff;
@@ -270,6 +270,14 @@ int			key_long_press(int keycode, t_mlx *map)
 			map->img.img_ptr, 0, 0);
 	return (1);
 }
+
+void 		print_usage(void)
+{
+				ft_putstr("Usage: \n");
+				ft_putstr("pass fractal's name as argument to lauch desired fractal\nOptions are :\n");
+				ft_putstr("- julia\n- mandelbrot\n- burningship\n");
+				ft_putstr("Example: ./fractol julia");
+}
 void		check_input(t_mlx *map)
 {
 	char 	*str1;
@@ -287,13 +295,14 @@ void		check_input(t_mlx *map)
 			map->input = BURNINGSHIP;
 	else
 	{
-			ft_putstr("invalid argument");
+			ft_putstr("Sorry, this program is too stupid to generate this fractal\n");
+			print_usage();
 			map->input = 0;
 	}
 }
 int		 mouse_move(int x, int y, t_mlx *map)
 {
-	printf("x is %d, y is %d\n", x, y);
+	//printf("x is %d, y is %d\n", x, y);
 	/*x range is 0 to IMG_WIDTH
 	y range is 0 to IMG_HEIGHT
 	ci range is (-2 to 2)
@@ -307,12 +316,34 @@ int		 mouse_move(int x, int y, t_mlx *map)
 			x + 1 = cr + abs(-2 / IMG_WIDTH)
 			x = 0, cr = -2
 			x = 10, cr = -2 + 10 * abs(2 / IMG_WIDTH)*/
+	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
+	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	if(map->input == JULIA && map->freez == 0)
 	{
 		map->f.cr = (double)x * 2 / IMG_WIDTH - 2;
 		map->f.ci = (double)y * 2 / IMG_HEIGHT -2;
 	}
-	printf("cr is %f, ci is %f\n", map->f.cr, map->f.ci);
+	while (x < 10 && map->freez == 1)
+	{
+		map->f.MinRe += real_diff;
+		map->f.MaxRe += real_diff;
+	}
+	while (x > IMG_WIDTH - 10 && map->freez == 1)
+	{
+		map->f.MinRe -= real_diff;
+		map->f.MaxRe -= real_diff;
+	}
+	while (y < 10 && map->freez == 1)
+	{
+		map->f.MinIm += img_diff;
+		map->f.MaxIm += img_diff;
+	}
+	while (y > IMG_HEIGHT && map->freez == 1)
+	{
+		map->f.MinIm -= img_diff;
+		map->f.MaxIm -= img_diff;
+	}
+	//printf("cr is %f, ci is %f\n", map->f.cr, map->f.ci);
 	empty(map);
 	escape_time(map);
 	mlx_put_image_to_window(map->mlx, map->win,
@@ -322,7 +353,7 @@ int		 mouse_move(int x, int y, t_mlx *map)
 
 int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 {
-	printf("button is %d\n", button);
+//	printf("button is %d\n", button);
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	if (button == 5)
@@ -332,7 +363,7 @@ int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 		map->f.MaxRe += real_diff;
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm += img_diff;
-		printf("Min im is %f\n", map->f.MaxIm);
+	//	printf("Min im is %f\n", map->f.MaxIm);
 	}
 	if (button == 4)
 	{

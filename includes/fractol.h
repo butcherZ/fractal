@@ -41,6 +41,8 @@ typedef	struct	s_fractal
 	double z_im_square;
 	double cr;
 	double ci;
+	double real_diff;
+	double img_diff;
 	int isInside;
 	int MaxIterations;
 	int n;
