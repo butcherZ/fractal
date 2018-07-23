@@ -10,7 +10,7 @@
 # define IMG_WIDTH WIN_WIDTH
 # define IMG_HEIGHT WIN_HEIGHT
 
-#	define JULIA 1
+# define JULIA 1
 # define MANDELBROT 2
 # define BURNINGSHIP 3
 
@@ -75,8 +75,9 @@ typedef struct	s_mlx
 	int			trigger;
 	int			index;
 	int 		total; //total pixels;
-	char    *argv;
+	char    	*argv;
 	int			input;
+	int			animated;
 }				t_mlx;
 
 /*

@@ -13,13 +13,15 @@
 ** In the same way I defined that the lower border of the image is equivalent to
 ** the imaginary part -1.2.
 **/
-void init_mandelbrot(t_mlx *map)
+
+
+void	init_mandelbrot(t_mlx *map)
 {
 	map->f.MinRe = -2.0; //LEFT change to zoom
 	map->f.MaxRe = 1.0; // RIGHT change to zoom
 	map->f.MinIm = -1.2; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	map->f.MaxIterations = 50;
+	//map->f.MaxIterations = 1;
 	map->fac.count = 1;
 	map->f.cr = 0;
 	map->f.ci = 0;
@@ -31,7 +33,7 @@ void init_julia(t_mlx *map)
 	map->f.MaxRe = 1.7; // RIGHT change to zoom
 	map->f.MinIm = -1.3; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	map->f.MaxIterations = 50;
+	//map->f.MaxIterations = 1;
 	map->fac.count = 1;
 	map->f.cr = -0.70176;
 	map->f.ci = -0.3842;
@@ -43,11 +45,43 @@ void init_burningship(t_mlx *map)
 	map->f.MaxRe = 1.0; // RIGHT change to zoom
 	map->f.MinIm = -0.6; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	map->f.MaxIterations = 100;
+//	map->f.MaxIterations = 1;
 	map->fac.count = 1;
 	map->f.cr = 0;
 	map->f.ci = 0;
 }
+
+void	set_max_iterations(t_mlx *map)
+{
+	if (map->trigger == 1 && map->animated == 0)
+	{
+		map->f.MaxIterations = 1;
+		map->animated = 1;
+	}
+	if (map->trigger == 1 && map->animated == 1)
+	{
+		if (map->f.MaxIterations < 30)
+			map->f.MaxIterations += 1;
+		if (map->f.MaxIterations == 30)
+			map->f.MaxIterations = 1;
+	}
+	else if (map->trigger == 0 && map->animated == 0)
+		map->f.MaxIterations = 50;
+}
+
+void		init_fractol(t_mlx *map)
+{
+	if(map->input == 0)
+			exit(1);
+	else if (map->input == JULIA)
+			init_julia(map);
+	else if(map->input == MANDELBROT)
+			init_mandelbrot(map);
+	else if(map->input == BURNINGSHIP)
+			init_burningship(map);
+	set_max_iterations(map);
+}
+
 unsigned long createRGB(int r, int g, int b)
 {
     return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
@@ -146,15 +180,23 @@ void loop_through(t_mlx *map)
 	}
 }
 
+void increase_iterations(t_mlx *map)
+{
+//	printf("count is %d\n", map->fac.count);
+	if (map->fac.count % 30 == 0)
+	{
+		if (map->fac.count > 0)
+			map->f.MaxIterations *= 1.2;
+		else
+			map->f.MaxIterations /= 1.2;
+	}
+}
+
 void escape_time(t_mlx *map) // this is burning ship
 {
 	set_factor(map);
-	if (map->fac.count % 30 == 0)
-	{
-			map->f.MaxIterations *= 1.2;
-			printf("iterations is %d\n", map->f.MaxIterations);
-			printf("count is %d\n", map->fac.count);
-	}
+	set_max_iterations(map);
+	increase_iterations(map);
 	loop_through(map);
 }
 
@@ -164,11 +206,8 @@ int			mlx_while(t_mlx *map)
 	//map->f.MaxIterations = 1;
 	if (map->trigger == 1 && map->index > 200)
 	{
+		printf("MaxIterations is %d\n", map->f.MaxIterations);
 		map->index = 0;
-		if (map->f.MaxIterations <= 30)
-			map->f.MaxIterations += 1;
-		if (map->f.MaxIterations == 30)
-			map->f.MaxIterations -= 1;
 		empty(map);
 		escape_time(map);
 		mlx_put_image_to_window(map->mlx, map->win,
@@ -179,9 +218,10 @@ int			mlx_while(t_mlx *map)
 
 int			key_down(int keycode, t_mlx *map)
 {
-	if (keycode == 10)
+	if (keycode == 50)
 	{
-		init_mandelbrot(map);
+		init_fractol(map);
+		map->animated = 0;
 	}
 	if (keycode == 48)
 	{
@@ -204,17 +244,17 @@ int			key_long_press(int keycode, t_mlx *map)
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	printf("keycode is %d\n", keycode);
-	if (keycode == 18)
+	if (keycode == 19)
 	{
-		map->fac.count += 1;
+		map->fac.count -= 1;
 		map->f.MinRe -= real_diff;
 		map->f.MaxRe += real_diff;
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm += img_diff;
 	}
-	if (keycode == 19)
+	if (keycode == 18)
 	{
-		map->fac.count -= 1;
+		map->fac.count += 1;
 		map->f.MinRe += real_diff;
 		map->f.MaxRe -= real_diff;
 		map->f.MinIm += img_diff;
@@ -239,6 +279,22 @@ int			key_long_press(int keycode, t_mlx *map)
 	{
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm -= img_diff;
+	}
+	if (keycode == 12)
+	{
+		if(map->input == JULIA)
+		{
+			map->f.cr += 0.01;
+			map->f.ci += 0.01;
+		}
+	}
+	if (keycode == 13)
+	{
+		if(map->input == JULIA)
+		{
+			map->f.cr -= 0.01;
+			map->f.ci -= 0.01;
+		}
 	}
 	empty(map);
 	escape_time(map);
@@ -278,26 +334,21 @@ int			main(int argc, char *argv[])
 	map.fac.zoom = 1;
 	map.fac.count = 0;
 	map.fac.increase_iterations = 1;
+	map.animated = 0;
 	map.mlx = mlx_init();
 	map.win = mlx_new_window(map.mlx, WIN_WIDTH, WIN_HEIGHT,
 			"is this shit working?");
 	if (argc != 2)
 	{
 			ft_putstr("wrong arguments numbers\n");
+			//add usage;
 			return (-1);
 	}
 	if (argc == 2)
 	{
 		map.argv = argv[1];
 		check_input(&map);
-		if(map.input == 0)
-				exit(1);
-		else if (map.input == 1)
-				init_julia(&map);
-		else if(map.input == 2)
-				init_mandelbrot(&map);
-		else if(map.input == 3)
-				init_burningship(&map);
+		init_fractol(&map);
 	}
 	init_image(&map);
 	escape_time(&map);
