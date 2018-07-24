@@ -4,11 +4,14 @@
 # include <math.h>
 # include "../minilibx/mlx.h"
 
-# define WIN_WIDTH 1024
-# define WIN_HEIGHT 768
+# define WIN_WIDTH 2000
+# define WIN_HEIGHT 1000
 
-# define IMG_WIDTH WIN_WIDTH
+# define IMG_WIDTH (WIN_WIDTH - 300)
 # define IMG_HEIGHT WIN_HEIGHT
+
+# define MENU_WIDTH 600
+# define MENU_HEIGHT WIN_HEIGHT
 
 # define JULIA 1
 # define MANDELBROT 2
@@ -65,15 +68,28 @@ typedef	struct  s_color
 	int b;
 	float t;
 }								t_color;
+
+typedef	struct	s_ui
+{
+	void		*img_ptr;
+	int			*addr;
+	int			bits_per_pixel;
+	int			size_line;
+	int			endian;
+	int 		x;
+	int			y;
+}				t_ui;
+
 typedef struct	s_mlx
 {
 	void		*mlx;
 	void		*win;
 	//int			color;
-  t_img		img;
+  	t_img		img;
 	t_fractal	f;
 	t_factor fac;
 	t_color color;
+	t_ui		ui;
 	int			trigger;
 	int			index;
 	int 		total; //total pixels;
@@ -87,7 +103,7 @@ typedef struct	s_mlx
 **  set up env for image set_up_image.c
 */
 
-void			init_image(t_mlx *mlx);
+void			init_image(t_mlx *mlx, int width, int height);
 void			img_put_pixel(t_mlx *mlx, int x, int y, int color);
 void			empty(t_mlx *mlx);
 

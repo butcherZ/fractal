@@ -20,12 +20,12 @@
 **	functions for setting up image.
 */
 
-void		init_image(t_mlx *mlx)
+void		init_image(t_mlx *mlx, int width, int height)
 {
 	int		byte_per_pixel;
 
 	byte_per_pixel = mlx->img.bits_per_pixel / 8;
-	mlx->img.img_ptr = mlx_new_image(mlx->mlx, IMG_WIDTH, IMG_HEIGHT);
+	mlx->img.img_ptr = mlx_new_image(mlx->mlx, width, height);
 	mlx->img.addr = (int*)mlx_get_data_addr(mlx->img.img_ptr,
 			&mlx->img.bits_per_pixel, &mlx->img.size_line, &mlx->img.endian);
 }
