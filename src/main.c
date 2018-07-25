@@ -201,10 +201,16 @@ void increase_iterations(t_mlx *map)
 
 void escape_time(t_mlx *map) // this is burning ship
 {
+	static int index;
+
 	set_factor(map);
 	set_max_iterations(map);
 	increase_iterations(map);
 	loop_through(map);
+	mlx_put_image_to_window(map->mlx, map->win,
+			map->img.img_ptr, WIN_WIDTH / 4, 0);
+	mlx_string_put(map->mlx, map->win, 500, 10, 0xFFFFFF, ft_itoa(index));
+index++;
 }
 
 int			mlx_while(t_mlx *map)
@@ -217,10 +223,8 @@ int			mlx_while(t_mlx *map)
 		map->index = 0;
 	}
 //	empty(map);
-	escape_time(map);
-	mlx_put_image_to_window(map->mlx, map->win,
-			map->img.img_ptr, WIN_WIDTH / 4, 0);
-		mlx_string_put(map->mlx, map->win, 500, 10, 0xFFFFFF, ft_itoa(map->index));
+	// escape_time(map);
+	//mlx_string_put(map->mlx, map->win, 500, 10, 0xFFFFFF, ft_itoa(map->index));
 	return (0);
 }
 
@@ -242,8 +246,6 @@ int			key_down(int keycode, t_mlx *map)
 	}
 	empty(map);
 	escape_time(map);
-	mlx_put_image_to_window(map->mlx, map->win,
-			map->img.img_ptr, WIN_WIDTH / 4, 0);
 	return (1);
 }
 
@@ -274,8 +276,6 @@ int			key_long_press(int keycode, t_mlx *map)
 	}
 	empty(map);
 	escape_time(map);
-	mlx_put_image_to_window(map->mlx, map->win,
-			map->img.img_ptr, WIN_WIDTH / 4, 0);
 	return (1);
 }
 
@@ -355,8 +355,7 @@ int		 mouse_move(int x, int y, t_mlx *map)
 	//printf("cr is %f, ci is %f\n", map->f.cr, map->f.ci);
 	empty(map);
 	escape_time(map);
-	mlx_put_image_to_window(map->mlx, map->win,
-			map->img.img_ptr, WIN_WIDTH / 4, 0);
+	draw_ui(map);
 	return (1);
 }
 
@@ -391,8 +390,6 @@ int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 	}
 	empty(map);
 	escape_time(map);
-	mlx_put_image_to_window(map->mlx, map->win,
-			map->img.img_ptr, WIN_WIDTH / 4, 0);
 	return(1);
 }
 void  fill_square(t_mlx *map, int width, int height)
@@ -406,7 +403,7 @@ void  fill_square(t_mlx *map, int width, int height)
 	{
 		if (i < width)
 		{
-			img_put_pixel(map, i, j, 0x181818);
+			ui_img_put_pixel(map, i, j, 0x181818);
 			i++;
 		}
 		else
@@ -416,31 +413,29 @@ void  fill_square(t_mlx *map, int width, int height)
 		}
 	}
 }
-int		expose_hook(t_mlx *map)
-{
-	mlx_string_put(map->mlx, map->win, 100, 600, 0xFFFFFF, ft_itoa(map->freez));
-	empty(map);
-	mlx_put_image_to_window(map->mlx, map->win,
-			map->img.img_ptr, WIN_WIDTH / 4, 0);
-	return (0);
-}
 
 /*int	print_usage_real_time(t_mlx *map)
 {
 	mlx_string_put(map->mlx, map->win, 100, 600, 0xFFFFFF, ft_itoa(map->freez));
 	return (0);
 }*/
-void 		ui(t_mlx *map)
+
+void draw_ui(t_mlx *map)
 {
-	t_mlx   ui;
-	ui.mlx = map->mlx;
-	ui.win = map->win;
-	init_image(&ui, MENU_WIDTH, MENU_HEIGHT);
-	fill_square(&ui, MENU_WIDTH, MENU_HEIGHT);
+	static int test;
+	mlx_put_image_to_window(map->mlx, map->win,
+					map->ui_img.img_ptr, 0, 0);
+mlx_string_put(map->mlx, map->win, 30, 60, 0xFFFFFF, ft_itoa(test));
+test++;
+}
+
+void 		init_ui(t_mlx *map)
+{
+	init_image_ui(map, MENU_WIDTH, MENU_HEIGHT);
+	fill_square(map, MENU_WIDTH, MENU_HEIGHT);
+	draw_ui(map);
 //	print_usage_real_time(&ui);
-	mlx_put_image_to_window(ui.mlx, ui.win,
-					ui.img.img_ptr, 0, 0);
-//	mlx_string_put(ui.mlx, ui.win, 30, 60, 0xFFFFFF, ft_itoa(map->f.MaxIterations));
+
 }
 
 int			main(int argc, char *argv[])
@@ -471,17 +466,15 @@ int			main(int argc, char *argv[])
 		init_fractol(&map);
 	}
 	init_image(&map, IMG_WIDTH, IMG_HEIGHT);
-	ui(&map);
+	init_ui(&map);
 	escape_time(&map);
 	//draw(&map);
 	mlx_key_hook(map.win, key_down, &map);
 	mlx_hook(map.win, 2, 0, key_long_press, &map);
 	mlx_hook(map.win, 4, 0, mouse_wheel, &map);
 	mlx_hook(map.win, 6, 0, mouse_move, &map);
-	mlx_expose_hook(map.win, expose_hook, &map);
 	mlx_loop_hook(map.mlx, mlx_while, &map);
-	mlx_put_image_to_window(map.mlx, map.win,
-			map.img.img_ptr, WIN_WIDTH / 4, 0);
+
 //	mlx_loop_hook(map.mlx, print_usage_real_time, &map);
 	mlx_loop(map.mlx);
 	return (0);

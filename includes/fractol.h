@@ -86,6 +86,7 @@ typedef struct	s_mlx
 	void		*win;
 	//int			color;
   	t_img		img;
+		t_img		ui_img;
 	t_fractal	f;
 	t_factor fac;
 	t_color color;
@@ -107,6 +108,10 @@ void			init_image(t_mlx *mlx, int width, int height);
 void			img_put_pixel(t_mlx *mlx, int x, int y, int color);
 void			empty(t_mlx *mlx);
 
+void		init_image_ui(t_mlx *mlx, int width, int height);
+void		ui_img_put_pixel(t_mlx *mlx, int x, int y, int color);
 
+void draw_ui(t_mlx *map);
+void 		init_ui(t_mlx *map);
 
 #endif

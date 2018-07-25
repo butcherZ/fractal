@@ -30,6 +30,24 @@ void		init_image(t_mlx *mlx, int width, int height)
 			&mlx->img.bits_per_pixel, &mlx->img.size_line, &mlx->img.endian);
 }
 
+void		init_image_ui(t_mlx *mlx, int width, int height)
+{
+	int		byte_per_pixel;
+
+	byte_per_pixel = mlx->ui_img.bits_per_pixel / 8;
+	mlx->ui_img.img_ptr = mlx_new_image(mlx->mlx, width, height);
+	mlx->ui_img.addr = (int*)mlx_get_data_addr(mlx->ui_img.img_ptr,
+			&mlx->ui_img.bits_per_pixel, &mlx->ui_img.size_line, &mlx->ui_img.endian);
+}
+
+
+void		ui_img_put_pixel(t_mlx *mlx, int x, int y, int color)
+{
+	if ((x >= 0 && x <= MENU_WIDTH) && (y >= 0 && y <= MENU_HEIGHT))
+		mlx->ui_img.addr[y * (mlx->ui_img.size_line / 4) + x] = color;
+}
+
+
 void		img_put_pixel(t_mlx *mlx, int x, int y, int color)
 {
 	if ((x >= 0 && x <= IMG_WIDTH) && (y >= 0 && y <= IMG_HEIGHT))
