@@ -14,6 +14,13 @@
 ** the imaginary part -1.2.
 **/
 
+/**
+notes: 1. remove animation?
+		2. hit a key to display info
+		3. handle blinking when there are other function has benn called
+		4. remove sidebar or keep it for displaying Usage ?
+		5. add mouse coordinates and keycode to a struct so they could be displayed later;
+**/
 
 void	init_mandelbrot(t_mlx *map)
 {
@@ -208,11 +215,12 @@ int			mlx_while(t_mlx *map)
 	{
 	//	printf("MaxIterations is %d\n", map->f.MaxIterations);
 		map->index = 0;
-		empty(map);
-		escape_time(map);
-		mlx_put_image_to_window(map->mlx, map->win,
-				map->img.img_ptr, WIN_WIDTH / 4, 0);
 	}
+//	empty(map);
+	escape_time(map);
+	mlx_put_image_to_window(map->mlx, map->win,
+			map->img.img_ptr, WIN_WIDTH / 4, 0);
+		mlx_string_put(map->mlx, map->win, 500, 10, 0xFFFFFF, ft_itoa(map->index));
 	return (0);
 }
 
