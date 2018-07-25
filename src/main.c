@@ -201,16 +201,12 @@ void increase_iterations(t_mlx *map)
 
 void escape_time(t_mlx *map) // this is burning ship
 {
-	static int index;
-
 	set_factor(map);
 	set_max_iterations(map);
 	increase_iterations(map);
 	loop_through(map);
 	mlx_put_image_to_window(map->mlx, map->win,
 			map->img.img_ptr, WIN_WIDTH / 4, 0);
-	mlx_string_put(map->mlx, map->win, 500, 10, 0xFFFFFF, ft_itoa(index));
-index++;
 }
 
 int			mlx_while(t_mlx *map)
@@ -222,8 +218,9 @@ int			mlx_while(t_mlx *map)
 	//	printf("MaxIterations is %d\n", map->f.MaxIterations);
 		map->index = 0;
 	}
-//	empty(map);
-	// escape_time(map);
+	//draw_ui(map);
+	//empty(map);
+	//escape_time(map);
 	//mlx_string_put(map->mlx, map->win, 500, 10, 0xFFFFFF, ft_itoa(map->index));
 	return (0);
 }
@@ -325,6 +322,8 @@ whenever x + 1, cr + abs(-2 / IMG_WIDTH)
 int		 mouse_move(int x, int y, t_mlx *map)
 {
 	//printf("x is %d, y is %d\n", x, y);
+		map->info.mouse_x = x;
+		map->info.mouse_y = y;
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	if(map->input == JULIA && map->freez == 0)
@@ -362,7 +361,7 @@ int		 mouse_move(int x, int y, t_mlx *map)
 int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 {
 //	printf("button is %d\n", button);
-	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
+	 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	if (button == 5)
 	{
@@ -383,16 +382,16 @@ int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 	if (button == 1)
 	{
 			map->freez= (map->freez + 1) % 2;
-			printf("Max im is %f\n", map->f.MaxIm);
-			printf("Min im is %f\n", map->f.MinIm);
-			printf("Max Re is %f\n", map->f.MaxRe);
-			printf("Min Re is %f\n", map->f.MinRe);
+			// printf("Max im is %f\n", map->f.MaxIm);
+			// printf("Min im is %f\n", map->f.MinIm);
+			// printf("Max Re is %f\n", map->f.MaxRe);
+			// printf("Min Re is %f\n", map->f.MinRe);
 	}
 	empty(map);
 	escape_time(map);
 	return(1);
 }
-void  fill_square(t_mlx *map, int width, int height)
+void  fill_square(t_mlx *map, int width, int height, int color)
 {
 	int i;
 	int j;
@@ -403,7 +402,7 @@ void  fill_square(t_mlx *map, int width, int height)
 	{
 		if (i < width)
 		{
-			ui_img_put_pixel(map, i, j, 0x181818);
+			ui_img_put_pixel(map, i, j, color);
 			i++;
 		}
 		else
@@ -419,20 +418,23 @@ void  fill_square(t_mlx *map, int width, int height)
 	mlx_string_put(map->mlx, map->win, 100, 600, 0xFFFFFF, ft_itoa(map->freez));
 	return (0);
 }*/
-
+void print_info(t_mlx *map)
+{
+	mlx_string_put(map->mlx, map->win, 30, 60, 0xFFFFFF, ft_itoa(map->info.mouse_x));
+	mlx_string_put(map->mlx, map->win, 30, 100, 0xFFFFFF, ft_itoa(map->info.mouse_y));
+}
 void draw_ui(t_mlx *map)
 {
-	static int test;
 	mlx_put_image_to_window(map->mlx, map->win,
 					map->ui_img.img_ptr, 0, 0);
-mlx_string_put(map->mlx, map->win, 30, 60, 0xFFFFFF, ft_itoa(test));
-test++;
+	print_info(map);
+
 }
 
 void 		init_ui(t_mlx *map)
 {
 	init_image_ui(map, MENU_WIDTH, MENU_HEIGHT);
-	fill_square(map, MENU_WIDTH, MENU_HEIGHT);
+	fill_square(map, MENU_WIDTH, MENU_HEIGHT, 0x181818);
 	draw_ui(map);
 //	print_usage_real_time(&ui);
 
@@ -471,6 +473,7 @@ int			main(int argc, char *argv[])
 	//draw(&map);
 	mlx_key_hook(map.win, key_down, &map);
 	mlx_hook(map.win, 2, 0, key_long_press, &map);
+	printf("MAIN minRe is %f\n", map.f.MinRe);
 	mlx_hook(map.win, 4, 0, mouse_wheel, &map);
 	mlx_hook(map.win, 6, 0, mouse_move, &map);
 	mlx_loop_hook(map.mlx, mlx_while, &map);
