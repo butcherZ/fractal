@@ -4,8 +4,8 @@
 # include <math.h>
 # include "../minilibx/mlx.h"
 
-# define WIN_WIDTH 2000
-# define WIN_HEIGHT 1000
+# define WIN_WIDTH 1000
+# define WIN_HEIGHT 800
 
 # define IMG_WIDTH (WIN_WIDTH - WIN_WIDTH / 4)
 # define IMG_HEIGHT WIN_HEIGHT
@@ -70,8 +70,9 @@ typedef	struct  s_color
 
 typedef	struct	s_info
 {
-		int mouse_x;
-		int mouse_y;
+		int 	mouse_x;
+		int 	mouse_y;
+		int 	mouse_button;
 }				t_info;
 
 typedef struct	s_mlx

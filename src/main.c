@@ -190,12 +190,19 @@ void loop_through(t_mlx *map)
 void increase_iterations(t_mlx *map)
 {
 //	printf("count is %d\n", map->fac.count);
+	int flag = 0;
 	if (map->fac.count % 30 == 0)
 	{
-		if (map->fac.count > 0)
+		if (map->info.mouse_button == 4 && flag == 0)
+		{
+			flag = 1;
 			map->f.MaxIterations *= 1.2;
-		else if (map->fac.count < 0)
-	   	 	map->f.MaxIterations /= 1.2;
+		}
+		if  (map->info.mouse_button == 5 && flag == 0)
+		{
+			flag = 1;
+			map->f.MaxIterations /= 1.2;
+		}
 	}
 }
 
@@ -363,9 +370,9 @@ int		 mouse_move(int x, int y, t_mlx *map)
 int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 {
 //	printf("button is %d\n", button);
-	 double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
+ 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
-	printf("MaxIterations is %d\n", map->f.MaxIterations);
+	map->info.mouse_button = button;
 	if (button == 5)
 	{
 		map->fac.count -= 1;
@@ -475,7 +482,7 @@ int			main(int argc, char *argv[])
 	mlx_hook(map.win, 2, 0, key_long_press, &map);
 	mlx_hook(map.win, 4, 0, mouse_wheel, &map);
 	mlx_hook(map.win, 6, 0, mouse_move, &map);
-	mlx_loop_hook(map.mlx, mlx_while, &map);
+	//mlx_loop_hook(map.mlx, mlx_while, &map);
 
 //	mlx_loop_hook(map.mlx, print_usage_real_time, &map);
 	mlx_loop(map.mlx);
