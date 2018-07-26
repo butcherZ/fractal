@@ -28,7 +28,7 @@ void	init_mandelbrot(t_mlx *map)
 	map->f.MaxRe = 1.41; // RIGHT change to zoom
 	map->f.MinIm = -1.16; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	//map->f.MaxIterations = 1;
+	map->f.MaxIterations = 30;
 	map->fac.count = 1;
 	map->f.cr = 0;
 	map->f.ci = 0;
@@ -40,7 +40,7 @@ void init_julia(t_mlx *map)
 	map->f.MaxRe = 5.49; // RIGHT
 	map->f.MinIm = -2.9; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	//map->f.MaxIterations = 1;
+	map->f.MaxIterations = 30;
 	map->fac.count = 1;
 	map->f.cr = -0.70176;
 	map->f.ci = -0.3842;
@@ -52,20 +52,20 @@ void init_burningship(t_mlx *map)
 	map->f.MaxRe = 3.29; // RIGHT change to zoom
 	map->f.MinIm = -1.43; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-//	map->f.MaxIterations = 1;
+	map->f.MaxIterations = 30;
 	map->fac.count = 1;
 	map->f.cr = 0;
 	map->f.ci = 0;
 }
 
-void	set_max_iterations(t_mlx *map)
+/*void	set_max_iterations(t_mlx *map)
 {
 	if (map->trigger == 1 && map->animated == 0)
 	{
 		map->f.MaxIterations = 1;
 		map->animated = 1;
 	}
-	if (map->trigger == 1 && map->animated == 1)
+	else if (map->trigger == 1 && map->animated == 1)
 	{
 		if (map->f.MaxIterations < 30)
 			map->f.MaxIterations += 1;
@@ -73,8 +73,8 @@ void	set_max_iterations(t_mlx *map)
 			map->f.MaxIterations = 1;
 	}
 	else if (map->trigger == 0 && map->animated == 0)
-		map->f.MaxIterations = 20;
-}
+		map->f.MaxIterations = 30;
+}*/
 
 void		init_fractol(t_mlx *map)
 {
@@ -86,7 +86,7 @@ void		init_fractol(t_mlx *map)
 			init_mandelbrot(map);
 	else if(map->input == BURNINGSHIP)
 			init_burningship(map);
-	set_max_iterations(map);
+	//set_max_iterations(map);
 }
 
 unsigned long createRGB(int r, int g, int b)
@@ -194,15 +194,15 @@ void increase_iterations(t_mlx *map)
 	{
 		if (map->fac.count > 0)
 			map->f.MaxIterations *= 1.2;
-		else
-			map->f.MaxIterations /= 1.2;
 	}
+	// else if (map->fac.count < 0)
+	// 	map->f.MaxIterations /= 1.2;
 }
 
 void escape_time(t_mlx *map) // this is burning ship
 {
 	set_factor(map);
-	set_max_iterations(map);
+	//set_max_iterations(map);
 	increase_iterations(map);
 	loop_through(map);
 	mlx_put_image_to_window(map->mlx, map->win,
@@ -326,27 +326,29 @@ int		 mouse_move(int x, int y, t_mlx *map)
 		map->info.mouse_y = y;
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
+	int hotarea;
+	hotarea = 20;
 	if(map->input == JULIA && map->freez == 0)
 	{
 		map->f.cr = (double)x * 2 / IMG_WIDTH - 2;
 		map->f.ci = (double)y * 2 / IMG_HEIGHT -2;
 	}
-	if (x < 10 && map->freez == 1)
-	{
-		map->f.MinRe += real_diff;
-		map->f.MaxRe += real_diff;
-	}
-	if (x > IMG_WIDTH - 10 && map->freez == 1)
+	if (x > MENU_WIDTH && x < (MENU_WIDTH + hotarea) && map->freez == 1)
 	{
 		map->f.MinRe -= real_diff;
 		map->f.MaxRe -= real_diff;
 	}
-	if (y < 10 && map->freez == 1)
+	if (x < WIN_WIDTH && x > (WIN_WIDTH - hotarea) && map->freez == 1)
+	{
+		map->f.MinRe += real_diff;
+		map->f.MaxRe += real_diff;
+	}
+	if (y < hotarea && y > 0 && map->freez == 1)
 	{
 		map->f.MinIm += img_diff;
 		map->f.MaxIm += img_diff;
 	}
-	if (y > IMG_HEIGHT && map->freez == 1)
+	if (y < WIN_HEIGHT && y > (WIN_HEIGHT - 10) && map->freez == 1)
 	{
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm -= img_diff;
@@ -361,8 +363,9 @@ int		 mouse_move(int x, int y, t_mlx *map)
 int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 {
 //	printf("button is %d\n", button);
-	 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
+	 double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
+	printf("MaxIterations is %d\n", map->f.MaxIterations);
 	if (button == 5)
 	{
 		map->fac.count -= 1;
@@ -389,6 +392,7 @@ int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 	}
 	empty(map);
 	escape_time(map);
+	draw_ui(map);
 	return(1);
 }
 void  fill_square(t_mlx *map, int width, int height, int color)
@@ -413,15 +417,12 @@ void  fill_square(t_mlx *map, int width, int height, int color)
 	}
 }
 
-/*int	print_usage_real_time(t_mlx *map)
-{
-	mlx_string_put(map->mlx, map->win, 100, 600, 0xFFFFFF, ft_itoa(map->freez));
-	return (0);
-}*/
 void print_info(t_mlx *map)
 {
 	mlx_string_put(map->mlx, map->win, 30, 60, 0xFFFFFF, ft_itoa(map->info.mouse_x));
 	mlx_string_put(map->mlx, map->win, 30, 100, 0xFFFFFF, ft_itoa(map->info.mouse_y));
+	mlx_string_put(map->mlx, map->win, 30, 150, 0xFFFFFF, ft_itoa(map->f.MaxIterations));
+	mlx_string_put(map->mlx, map->win, 30, 180, 0xFFFFFF, ft_itoa(map->fac.count));
 }
 void draw_ui(t_mlx *map)
 {
@@ -450,7 +451,6 @@ int			main(int argc, char *argv[])
 	map.fac.x_translation = 0;
 	map.fac.zoom = 1;
 	map.fac.count = 0;
-	map.fac.increase_iterations = 1;
 	map.animated = 0;
 	map.mlx = mlx_init();
 	map.win = mlx_new_window(map.mlx, WIN_WIDTH, WIN_HEIGHT,
@@ -473,7 +473,6 @@ int			main(int argc, char *argv[])
 	//draw(&map);
 	mlx_key_hook(map.win, key_down, &map);
 	mlx_hook(map.win, 2, 0, key_long_press, &map);
-	printf("MAIN minRe is %f\n", map.f.MinRe);
 	mlx_hook(map.win, 4, 0, mouse_wheel, &map);
 	mlx_hook(map.win, 6, 0, mouse_move, &map);
 	mlx_loop_hook(map.mlx, mlx_while, &map);

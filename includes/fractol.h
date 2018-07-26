@@ -4,7 +4,7 @@
 # include <math.h>
 # include "../minilibx/mlx.h"
 
-# define WIN_WIDTH 1000
+# define WIN_WIDTH 2000
 # define WIN_HEIGHT 1000
 
 # define IMG_WIDTH (WIN_WIDTH - WIN_WIDTH / 4)
@@ -56,7 +56,6 @@ typedef struct 	s_factor
 	double zoom;
 	double		 x_translation;
 	double		 y_translation;
-	int		 increase_iterations;
 	int 	 count;
 }								t_factor;
 
