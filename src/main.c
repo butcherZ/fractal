@@ -285,10 +285,10 @@ int			key_long_press(int keycode, t_mlx *map)
 
 void 		print_usage(void)
 {
-				ft_putstr("Usage: \n");
-				ft_putstr("pass fractal's name as argument to lauch desired fractal\nOptions are :\n");
-				ft_putstr("- julia\n- mandelbrot\n- burningship\n");
-				ft_putstr("Example: ./fractol julia");
+		ft_putstr("Usage: \n");
+		ft_putstr("pass fractal's name as argument to lauch desired fractal\nOptions are :\n");
+		ft_putstr("- julia\n- mandelbrot\n- burningship\n");
+		ft_putstr("Example: ./fractol julia");
 }
 void		check_input(t_mlx *map)
 {
@@ -329,8 +329,8 @@ whenever x + 1, cr + abs(-2 / IMG_WIDTH)
 int		 mouse_move(int x, int y, t_mlx *map)
 {
 	//printf("x is %d, y is %d\n", x, y);
-		map->info.mouse_x = x;
-		map->info.mouse_y = y;
+	map->info.mouse_x = x;
+	map->info.mouse_y = y;
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	int hotarea;
@@ -380,6 +380,7 @@ int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 		map->f.MaxRe += real_diff;
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm += img_diff;
+		printf("max im is %f\n", map->f.MaxIm);
 	}
 	if (button == 4)
 	{
@@ -392,10 +393,6 @@ int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 	if (button == 1)
 	{
 			map->freez= (map->freez + 1) % 2;
-			// printf("Max im is %f\n", map->f.MaxIm);
-			// printf("Min im is %f\n", map->f.MinIm);
-			// printf("Max Re is %f\n", map->f.MaxRe);
-			// printf("Min Re is %f\n", map->f.MinRe);
 	}
 	empty(map);
 	escape_time(map);
@@ -426,10 +423,16 @@ void  fill_square(t_mlx *map, int width, int height, int color)
 
 void print_info(t_mlx *map)
 {
-	mlx_string_put(map->mlx, map->win, 30, 60, 0xFFFFFF, ft_itoa(map->info.mouse_x));
-	mlx_string_put(map->mlx, map->win, 30, 100, 0xFFFFFF, ft_itoa(map->info.mouse_y));
-	mlx_string_put(map->mlx, map->win, 30, 150, 0xFFFFFF, ft_itoa(map->f.MaxIterations));
-	mlx_string_put(map->mlx, map->win, 30, 180, 0xFFFFFF, ft_itoa(map->fac.count));
+	mlx_string_put(map->mlx, map->win, 30, 30, 0x74ebd5, "informations: ");
+	mlx_string_put(map->mlx, map->win, 50, 70, 0xFFFFFF, "current fractal: ");
+	mlx_string_put(map->mlx, map->win, 220, 70, 0xFFFFFF, map->argv);
+	mlx_string_put(map->mlx, map->win, 50, 100, 0xFFFFFF, "mouse X: ");
+	mlx_string_put(map->mlx, map->win, 140, 100, 0xFFFFFF, ft_itoa(map->info.mouse_x));
+	mlx_string_put(map->mlx, map->win, 50, 130, 0xFFFFFF, "mouse Y: ");
+	mlx_string_put(map->mlx, map->win, 140, 130, 0xFFFFFF, ft_itoa(map->info.mouse_y));
+	mlx_string_put(map->mlx, map->win, 50, 160, 0xFFFFFF, "Max iterations: ");
+	mlx_string_put(map->mlx, map->win, 210, 160, 0xFFFFFF, ft_itoa(map->f.MaxIterations));
+//	mlx_string_put(map->mlx, map->win, 30, 180, 0xFFFFFF, ft_itoa(map->fac.count));
 }
 void draw_ui(t_mlx *map)
 {
@@ -442,10 +445,8 @@ void draw_ui(t_mlx *map)
 void 		init_ui(t_mlx *map)
 {
 	init_image_ui(map, MENU_WIDTH, MENU_HEIGHT);
-	fill_square(map, MENU_WIDTH, MENU_HEIGHT, 0x181818);
+	fill_square(map, MENU_WIDTH, MENU_HEIGHT, 0x2f181818);
 	draw_ui(map);
-//	print_usage_real_time(&ui);
-
 }
 
 int			main(int argc, char *argv[])
@@ -454,9 +455,8 @@ int			main(int argc, char *argv[])
 	map.index = 0;
 	map.freez = 0;
 	map.trigger = 0;
-	map.fac.y_translation = 0;
-	map.fac.x_translation = 0;
-	map.fac.zoom = 1;
+	map.info.mouse_x = 0;
+	map.info.mouse_y = 0;
 	map.fac.count = 0;
 	map.animated = 0;
 	map.mlx = mlx_init();
