@@ -58,7 +58,7 @@ void init_burningship(t_mlx *map)
 	map->f.ci = 0;
 }
 
-/*void	set_max_iterations(t_mlx *map)
+void	set_max_iterations(t_mlx *map)
 {
 	if (map->trigger == 1 && map->animated == 0)
 	{
@@ -72,9 +72,9 @@ void init_burningship(t_mlx *map)
 		if (map->f.MaxIterations == 30)
 			map->f.MaxIterations = 1;
 	}
-	else if (map->trigger == 0 && map->animated == 0)
-		map->f.MaxIterations = 30;
-}*/
+//	else if (map->trigger == 0 && map->animated == 0)
+	//	map->f.MaxIterations = 30;
+}
 
 void		init_fractol(t_mlx *map)
 {
@@ -86,7 +86,7 @@ void		init_fractol(t_mlx *map)
 			init_mandelbrot(map);
 	else if(map->input == BURNINGSHIP)
 			init_burningship(map);
-	//set_max_iterations(map);
+	set_max_iterations(map);
 }
 
 unsigned long createRGB(int r, int g, int b)
@@ -194,15 +194,15 @@ void increase_iterations(t_mlx *map)
 	{
 		if (map->fac.count > 0)
 			map->f.MaxIterations *= 1.2;
+		else if (map->fac.count < 0)
+	   	 	map->f.MaxIterations /= 1.2;
 	}
-	// else if (map->fac.count < 0)
-	// 	map->f.MaxIterations /= 1.2;
 }
 
 void escape_time(t_mlx *map) // this is burning ship
 {
 	set_factor(map);
-	//set_max_iterations(map);
+	set_max_iterations(map);
 	increase_iterations(map);
 	loop_through(map);
 	mlx_put_image_to_window(map->mlx, map->win,
@@ -219,8 +219,8 @@ int			mlx_while(t_mlx *map)
 		map->index = 0;
 	}
 	//draw_ui(map);
-	//empty(map);
-	//escape_time(map);
+	empty(map);
+	escape_time(map);
 	//mlx_string_put(map->mlx, map->win, 500, 10, 0xFFFFFF, ft_itoa(map->index));
 	return (0);
 }
