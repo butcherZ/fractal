@@ -72,8 +72,8 @@ void	set_max_iterations(t_mlx *map)
 		if (map->f.MaxIterations == 30)
 			map->f.MaxIterations = 1;
 	}
-//	else if (map->trigger == 0 && map->animated == 0)
-	//	map->f.MaxIterations = 30;
+	else if (map->trigger == 0 && map->animated == 0)
+		map->f.MaxIterations = 30;
 }
 
 void		init_fractol(t_mlx *map)
@@ -213,23 +213,7 @@ void escape_time(t_mlx *map) // this is burning ship
 	increase_iterations(map);
 	loop_through(map);
 	mlx_put_image_to_window(map->mlx, map->win,
-			map->img.img_ptr, WIN_WIDTH / 4, 0);
-}
-
-int			mlx_while(t_mlx *map)
-{
-	map->index += 1;
-	//map->f.MaxIterations = 1;
-	if (map->trigger == 1 && map->index > 200)
-	{
-	//	printf("MaxIterations is %d\n", map->f.MaxIterations);
-		map->index = 0;
-	}
-	//draw_ui(map);
-	empty(map);
-	escape_time(map);
-	//mlx_string_put(map->mlx, map->win, 500, 10, 0xFFFFFF, ft_itoa(map->index));
-	return (0);
+			map->img.img_ptr, 0, 0);
 }
 
 int			key_down(int keycode, t_mlx *map)
@@ -250,6 +234,7 @@ int			key_down(int keycode, t_mlx *map)
 	}
 	empty(map);
 	escape_time(map);
+	draw_ui(map);
 	return (1);
 }
 
@@ -280,6 +265,7 @@ int			key_long_press(int keycode, t_mlx *map)
 	}
 	empty(map);
 	escape_time(map);
+	draw_ui(map);
 	return (1);
 }
 
@@ -445,8 +431,8 @@ void draw_ui(t_mlx *map)
 void 		init_ui(t_mlx *map)
 {
 	init_image_ui(map, MENU_WIDTH, MENU_HEIGHT);
-	fill_square(map, MENU_WIDTH, MENU_HEIGHT, 0x2f181818);
-	draw_ui(map);
+	fill_square(map, MENU_WIDTH, MENU_HEIGHT, 0x66181818);
+//	draw_ui(map);
 }
 
 int			main(int argc, char *argv[])
@@ -477,14 +463,11 @@ int			main(int argc, char *argv[])
 	init_image(&map, IMG_WIDTH, IMG_HEIGHT);
 	init_ui(&map);
 	escape_time(&map);
-	//draw(&map);
+	draw_ui(&map);
 	mlx_key_hook(map.win, key_down, &map);
 	mlx_hook(map.win, 2, 0, key_long_press, &map);
 	mlx_hook(map.win, 4, 0, mouse_wheel, &map);
 	mlx_hook(map.win, 6, 0, mouse_move, &map);
-	//mlx_loop_hook(map.mlx, mlx_while, &map);
-
-//	mlx_loop_hook(map.mlx, print_usage_real_time, &map);
 	mlx_loop(map.mlx);
 	return (0);
 }
