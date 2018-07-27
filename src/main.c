@@ -193,12 +193,12 @@ void increase_iterations(t_mlx *map)
 	int flag = 0;
 	if (map->fac.count % 30 == 0)
 	{
-		if (map->info.mouse_button == 4 && flag == 0)
+		if (map->info.mouse_button == 5 && flag == 0)
 		{
 			flag = 1;
 			map->f.MaxIterations *= 1.2;
 		}
-		if  (map->info.mouse_button == 5 && flag == 0)
+		if  (map->info.mouse_button == 4 && flag == 0)
 		{
 			flag = 1;
 			map->f.MaxIterations /= 1.2;
@@ -206,10 +206,10 @@ void increase_iterations(t_mlx *map)
 	}
 }
 
-void escape_time(t_mlx *map) // this is burning ship
+void escape_time(t_mlx *map)
 {
-	set_factor(map);
 	increase_iterations(map);
+	set_factor(map);
 	loop_through(map);
 	mlx_put_image_to_window(map->mlx, map->win,
 			map->img.img_ptr, 0, 0);
@@ -351,76 +351,30 @@ int		 mouse_move(int x, int y, t_mlx *map)
 	draw_ui(map);
 	return (1);
 }
-/*int				ft_mouse_event(int key, int x, int y, t_fractol *p)
-{
-	double pos_cursor_x;
-	double pos_cursor_y;
 
-	ft_mouse_event2(key, p);
-	pos_cursor_x = p->x_min + (x * ((p->x_max - p->x_min) / WIN_X));
-	pos_cursor_y = p->y_max - (y * ((p->y_max - p->y_min) / WIN_Y));
-	if (key == 4)
-	{
-		p->x_max = pos_cursor_x + ((p->x_max - pos_cursor_x) * 1.2);
-		p->y_max = pos_cursor_y + ((p->y_max - pos_cursor_y) * 1.2);
-		p->x_min = pos_cursor_x - ((pos_cursor_x - p->x_min) * 1.2);
-		p->y_min = pos_cursor_y - ((pos_cursor_y - p->y_min) * 1.2);
-		p->calc = 1;
-	}
-	if (key == 5 && p->dy > 0.000000000000001 && p->dx > 0.000000000000001)
-	{
-		p->x_max = pos_cursor_x + ((p->x_max - pos_cursor_x) / 1.2);
-		p->y_max = pos_cursor_y + ((p->y_max - pos_cursor_y) / 1.2);
-		p->x_min = pos_cursor_x - ((pos_cursor_x - p->x_min) / 1.2);
-		p->y_min = pos_cursor_y - ((pos_cursor_y - p->y_min) / 1.2);
-		p->calc = 1;
-	}
-	return (1);
-}*/
 int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 {
-//	printf("button is %d\n", button);
- 	//double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
-	//double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
-
 	double cursor_x;
 	double cursor_y;
-
+	map->info.mouse_button = button;
 	cursor_x = map->f.MinRe + (x * ((map->f.MaxRe - map->f.MinRe) / IMG_WIDTH));
 	cursor_y = map->f.MaxIm - (y * ((map->f.MaxIm - map->f.MinIm) / IMG_HEIGHT));
 	if (button == 4)
 	{
-		map->fac.count += 1;
-		map->f.MinRe = cursor_x - ((cursor_x - map->f.MinRe) * 1.2);
-		map->f.MaxRe = cursor_x + ((map->f.MaxRe - cursor_x) * 1.2);
-		map->f.MinIm = cursor_y - ((cursor_y - map->f.MinIm) * 1.2);
-		map->f.MaxIm = cursor_y + ((map->f.MaxIm - cursor_y) * 1.2);
+		map->fac.count -= 1;
+		map->f.MinRe = cursor_x - ((cursor_x - map->f.MinRe) * 1.1);
+		map->f.MaxRe = cursor_x + ((map->f.MaxRe - cursor_x) * 1.1);
+		map->f.MinIm = cursor_y - ((cursor_y - map->f.MinIm) * 1.1);
+		map->f.MaxIm = cursor_y + ((map->f.MaxIm - cursor_y) * 1.1);
 	}
 	if (button == 5)
 	{
-		map->fac.count -= 1;
-		map->f.MinRe = cursor_x - ((cursor_x - map->f.MinRe) / 1.2);
-		map->f.MaxRe = cursor_x + ((map->f.MaxRe - cursor_x) / 1.2);
-		map->f.MinIm = cursor_y - ((cursor_y - map->f.MinIm) / 1.2);
-		map->f.MaxIm = cursor_y + ((map->f.MaxIm - cursor_y) / 1.2);
-	}
-	/*if (button == 5)
-	{
-		map->fac.count -= 1;
-		map->f.MinRe -= real_diff;
-		map->f.MaxRe += real_diff;
-		map->f.MinIm -= img_diff;
-		map->f.MaxIm += img_diff;
-	}
-	if (button == 4)
-	{
 		map->fac.count += 1;
-		map->f.MinRe += real_diff;
-		map->f.MaxRe -= real_diff;
-		map->f.MinIm += img_diff;
-		map->f.MaxIm -= img_diff;
-		//printf("max im is %f\n", map->f.MIm);
-	}*/
+		map->f.MinRe = cursor_x - ((cursor_x - map->f.MinRe) / 1.1);
+		map->f.MaxRe = cursor_x + ((map->f.MaxRe - cursor_x) / 1.1);
+		map->f.MinIm = cursor_y - ((cursor_y - map->f.MinIm) / 1.1);
+		map->f.MaxIm = cursor_y + ((map->f.MaxIm - cursor_y) / 1.1);
+	}
 	if (button == 1)
 	{
 			map->freez= (map->freez + 1) % 2;
@@ -430,6 +384,7 @@ int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 	draw_ui(map);
 	return(1);
 }
+
 void  fill_square(t_mlx *map, int width, int height, int color)
 {
 	int i;
