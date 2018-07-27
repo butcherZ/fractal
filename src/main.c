@@ -189,7 +189,6 @@ void loop_through(t_mlx *map)
 
 void increase_iterations(t_mlx *map)
 {
-//	printf("count is %d\n", map->fac.count);
 	int flag = 0;
 	if (map->fac.count % 30 == 0)
 	{
@@ -241,7 +240,6 @@ int			key_long_press(int keycode, t_mlx *map)
 {
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
 	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
-	//printf("keycode is %d\n", keycode);
 	if (keycode == 123)
 	{
 		map->f.MinRe += real_diff;
@@ -261,6 +259,14 @@ int			key_long_press(int keycode, t_mlx *map)
 	{
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm -= img_diff;
+	}
+	if (keycode == 12)
+	{
+		map->f.MaxIterations += 1;
+	}
+	if (keycode == 13)
+	{
+		map->f.MaxIterations -= 1;
 	}
 	empty(map);
 	escape_time(map);
@@ -313,7 +319,6 @@ whenever x + 1, cr + abs(-2 / IMG_WIDTH)
 
 int		 mouse_move(int x, int y, t_mlx *map)
 {
-	//printf("x is %d, y is %d\n", x, y);
 	map->info.mouse_x = x;
 	map->info.mouse_y = y;
 	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
@@ -345,7 +350,6 @@ int		 mouse_move(int x, int y, t_mlx *map)
 		map->f.MinIm -= img_diff;
 		map->f.MaxIm -= img_diff;
 	}
-	//printf("cr is %f, ci is %f\n", map->f.cr, map->f.ci);
 	empty(map);
 	escape_time(map);
 	draw_ui(map);
@@ -376,9 +380,9 @@ int 	mouse_wheel(int button, int x, int y, t_mlx *map)
 		map->f.MaxIm = cursor_y + ((map->f.MaxIm - cursor_y) / 1.1);
 	}
 	if (button == 1)
-	{
-			map->freez= (map->freez + 1) % 2;
-	}
+			map->freez = (map->freez + 1) % 2;
+	if (button == 2)
+			map->menu = (map->menu + 1) % 2;
 	empty(map);
 	escape_time(map);
 	draw_ui(map);
@@ -438,22 +442,29 @@ void print_control(t_mlx *map)
 	var_color = 0xFFAFBD;
 	mlx_string_put(map->mlx, map->win, 15, 300, 0x74ebd5, "Controls: ");
 	mlx_string_put(map->mlx, map->win, 35, 340, 0xFFFFFF, "Zoom In: ");
-	mlx_string_put(map->mlx, map->win, 35, 370, var_color, "Scroll up wheel");
-	mlx_string_put(map->mlx, map->win, 35, 400, 0xFFFFFF, "Zoom Out: ");
-	mlx_string_put(map->mlx, map->win, 35, 430, var_color, "Scroll down wheel");
-	mlx_string_put(map->mlx, map->win, 35, 460, 0xFFFFFF, "Move left / right: ");
-	mlx_string_put(map->mlx, map->win, 35, 490, var_color, "left/right Arrow");
-	mlx_string_put(map->mlx, map->win, 35, 520, 0xFFFFFF, "Move up / down: ");
-	mlx_string_put(map->mlx, map->win, 35, 550, var_color, "up/ down Arrow ");
-	mlx_string_put(map->mlx, map->win, 35, 580, 0xFFFFFF, "Freez Image: ");
-	mlx_string_put(map->mlx, map->win, 35, 610, var_color, "left click mouse");
+	mlx_string_put(map->mlx, map->win, 35, 365, var_color, "Scroll up wheel");
+	mlx_string_put(map->mlx, map->win, 35, 390, 0xFFFFFF, "Zoom Out: ");
+	mlx_string_put(map->mlx, map->win, 35, 415, var_color, "Scroll down wheel");
+	mlx_string_put(map->mlx, map->win, 35, 440, 0xFFFFFF, "Move left / right: ");
+	mlx_string_put(map->mlx, map->win, 35, 465, var_color, "left/right Arrow");
+	mlx_string_put(map->mlx, map->win, 35, 490, 0xFFFFFF, "Move up / down: ");
+	mlx_string_put(map->mlx, map->win, 35, 515, var_color, "up/ down Arrow ");
+	mlx_string_put(map->mlx, map->win, 35, 540, 0xFFFFFF, "Freez Image: ");
+	mlx_string_put(map->mlx, map->win, 35, 565, var_color, "left click mouse");
+	mlx_string_put(map->mlx, map->win, 35, 590, 0xFFFFFF, "Hide / Show menu: ");
+	mlx_string_put(map->mlx, map->win, 35, 615, var_color, "right click mouse");
+	mlx_string_put(map->mlx, map->win, 35, 640, 0xFFFFFF, "+ / - iterations: ");
+	mlx_string_put(map->mlx, map->win, 35, 665, var_color, "Q/W");
 }
 void draw_ui(t_mlx *map)
 {
-	mlx_put_image_to_window(map->mlx, map->win,
-					map->ui_img.img_ptr, 0, 0);
-	print_info(map);
-	print_control(map);
+	if (map->menu == ON)
+	{
+		mlx_put_image_to_window(map->mlx, map->win,
+						map->ui_img.img_ptr, 0, 0);
+		print_info(map);
+		print_control(map);
+	}
 }
 
 void 		init_ui(t_mlx *map)
@@ -467,12 +478,13 @@ int			main(int argc, char *argv[])
 {
   	t_mlx	map;
 	map.index = 0;
-	map.freez = 0;
+	map.freez = OFF;
 	map.trigger = 0;
 	map.info.mouse_x = 0;
 	map.info.mouse_y = 0;
 	map.fac.count = 0;
 	map.animated = 0;
+	map.menu = ON;
 	map.mlx = mlx_init();
 	map.win = mlx_new_window(map.mlx, WIN_WIDTH, WIN_HEIGHT,
 			"is this shit working?");

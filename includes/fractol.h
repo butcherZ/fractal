@@ -18,6 +18,8 @@
 # define MANDELBROT 2
 # define BURNINGSHIP 3
 
+# define ON 1
+# define OFF 0
 typedef struct	s_img
 {
 	void		*img_ptr;
@@ -93,6 +95,7 @@ typedef struct	s_mlx
 	char    	*argv;
 	int			input;
 	int			animated;
+	int			menu;
 	int			freez;
 }				t_mlx;
 
