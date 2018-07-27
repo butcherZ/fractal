@@ -28,11 +28,14 @@ int		key_down(int keycode, t_mlx *map)
 	if (keycode == 18)
 	{
 		map->color.color_style = DEFUALT;
-		printf("lalalala\n");
 	}
 	if (keycode == 19)
 	{
 		map->color.color_style = STAR_DUST;
+	}
+	if (keycode == 20)
+	{
+		map->color.color_style = BLOODY_HELL;
 	}
 	if (keycode == 53)
 	{

@@ -34,6 +34,7 @@
 
 # define DEFUALT 5
 # define STAR_DUST 6
+#	define BLOODY_HELL 7
 
 typedef struct	s_img
 {

@@ -43,6 +43,12 @@ void			get_color(t_mlx *map)
 		map->color.g = (int)(15 * (1 - t) * (1 - t) * t * t * 250);
 		map->color.b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 179);
 	}
+	if (map->color.color_style == BLOODY_HELL)
+	{
+		map->color.r = (int)(9 * (1 - t) * t * 175);
+		map->color.g = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
+		map->color.b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * t * 205);
+	}
 }
 
 void			draw(t_mlx *map, int x, int y)
