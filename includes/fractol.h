@@ -4,7 +4,7 @@
 # include <math.h>
 # include "../minilibx/mlx.h"
 
-# define WIN_WIDTH 1200
+# define WIN_WIDTH 1300
 # define WIN_HEIGHT 800
 
 //# define IMG_WIDTH (WIN_WIDTH - WIN_WIDTH / 4)

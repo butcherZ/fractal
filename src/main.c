@@ -28,7 +28,7 @@ void	init_mandelbrot(t_mlx *map)
 	map->f.MaxRe = 1.41; // RIGHT change to zoom
 	map->f.MinIm = -1.16; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	map->f.MaxIterations = 30;
+	map->f.MaxIterations = 80;
 	map->fac.count = 1;
 	map->f.cr = 0;
 	map->f.ci = 0;
@@ -40,7 +40,7 @@ void init_julia(t_mlx *map)
 	map->f.MaxRe = 5.49; // RIGHT
 	map->f.MinIm = -2.9; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	map->f.MaxIterations = 30;
+	map->f.MaxIterations = 80;
 	map->fac.count = 1;
 	map->f.cr = -0.70176;
 	map->f.ci = -0.3842;
@@ -52,7 +52,7 @@ void init_burningship(t_mlx *map)
 	map->f.MaxRe = 3.29; // RIGHT change to zoom
 	map->f.MinIm = -1.43; // TOP
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe) * IMG_HEIGHT / IMG_WIDTH; // BOTTOM
-	map->f.MaxIterations = 30;
+	map->f.MaxIterations = 80;
 	map->fac.count = 1;
 	map->f.cr = 0;
 	map->f.ci = 0;
@@ -409,23 +409,51 @@ void  fill_square(t_mlx *map, int width, int height, int color)
 
 void print_info(t_mlx *map)
 {
-	mlx_string_put(map->mlx, map->win, 20, 40, 0x74ebd5, "informations: ");
-	mlx_string_put(map->mlx, map->win, 40, 70, 0xFFFFFF, "current fractal: ");
-	mlx_string_put(map->mlx, map->win, 210, 70, 0xFFFFFF, map->argv);
-	mlx_string_put(map->mlx, map->win, 40, 100, 0xFFFFFF, "mouse X: ");
-	mlx_string_put(map->mlx, map->win, 130, 100, 0xFFFFFF, ft_itoa(map->info.mouse_x));
-	mlx_string_put(map->mlx, map->win, 40, 130, 0xFFFFFF, "mouse Y: ");
-	mlx_string_put(map->mlx, map->win, 130, 130, 0xFFFFFF, ft_itoa(map->info.mouse_y));
-	mlx_string_put(map->mlx, map->win, 40, 160, 0xFFFFFF, "Max iterations: ");
-	mlx_string_put(map->mlx, map->win, 200, 160, 0xFFFFFF, ft_itoa(map->f.MaxIterations));
-	mlx_string_put(map->mlx, map->win, 30, 180, 0xFFFFFF, ft_itoa(map->fac.count));
+	int var_color;
+
+	var_color = 0xFFAFBD;
+	mlx_string_put(map->mlx, map->win, 15, 30, 0x74ebd5, "informations: ");
+	mlx_string_put(map->mlx, map->win, 35, 70, 0xFFFFFF, "current fractal: ");
+	mlx_string_put(map->mlx, map->win, 205, 70, var_color, map->argv);
+	mlx_string_put(map->mlx, map->win, 35, 100, 0xFFFFFF, "mouse X: ");
+	mlx_string_put(map->mlx, map->win, 125, 100, var_color, ft_itoa(map->info.mouse_x));
+	mlx_string_put(map->mlx, map->win, 35, 130, 0xFFFFFF, "mouse Y: ");
+	mlx_string_put(map->mlx, map->win, 125, 130, var_color, ft_itoa(map->info.mouse_y));
+	mlx_string_put(map->mlx, map->win, 35, 160, 0xFFFFFF, "Max iterations: ");
+	mlx_string_put(map->mlx, map->win, 195, 160, var_color, ft_itoa(map->f.MaxIterations));
+	mlx_string_put(map->mlx, map->win, 35, 190, 0xFFFFFF, "Zoom: ");
+	mlx_string_put(map->mlx, map->win, 95, 190, var_color, ft_itoa((pow(1.1, map->fac.count) * 100) - 10));
+	mlx_string_put(map->mlx, map->win, 175, 190, 0xFFFFFF, "%");
+	mlx_string_put(map->mlx, map->win, 35, 220, 0xFFFFFF, "Freez Image: ");
+	if(map->freez == 0)
+		mlx_string_put(map->mlx, map->win, 170, 220, var_color, "OFF");
+	else
+		mlx_string_put(map->mlx, map->win, 170, 220, var_color, "ON");
+}
+
+void print_control(t_mlx *map)
+{
+	int var_color;
+
+	var_color = 0xFFAFBD;
+	mlx_string_put(map->mlx, map->win, 15, 300, 0x74ebd5, "Controls: ");
+	mlx_string_put(map->mlx, map->win, 35, 340, 0xFFFFFF, "Zoom In: ");
+	mlx_string_put(map->mlx, map->win, 35, 370, var_color, "Scroll up wheel");
+	mlx_string_put(map->mlx, map->win, 35, 400, 0xFFFFFF, "Zoom Out: ");
+	mlx_string_put(map->mlx, map->win, 35, 430, var_color, "Scroll down wheel");
+	mlx_string_put(map->mlx, map->win, 35, 460, 0xFFFFFF, "Move left / right: ");
+	mlx_string_put(map->mlx, map->win, 35, 490, var_color, "left/right Arrow");
+	mlx_string_put(map->mlx, map->win, 35, 520, 0xFFFFFF, "Move up / down: ");
+	mlx_string_put(map->mlx, map->win, 35, 550, var_color, "up/ down Arrow ");
+	mlx_string_put(map->mlx, map->win, 35, 580, 0xFFFFFF, "Freez Image: ");
+	mlx_string_put(map->mlx, map->win, 35, 610, var_color, "left click mouse");
 }
 void draw_ui(t_mlx *map)
 {
 	mlx_put_image_to_window(map->mlx, map->win,
 					map->ui_img.img_ptr, 0, 0);
 	print_info(map);
-
+	print_control(map);
 }
 
 void 		init_ui(t_mlx *map)
