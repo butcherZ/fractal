@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   key_hook.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zyuan <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/07/27 07:06:52 by zyuan             #+#    #+#             */
+/*   Updated: 2018/07/27 07:08:54 by zyuan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mlx.h"
 #include "fractol.h"
 #include "../libft/libft.h"
@@ -5,7 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-int			key_down(int keycode, t_mlx *map)
+int		key_down(int keycode, t_mlx *map)
 {
 	if (keycode == 50)
 	{
@@ -27,10 +39,13 @@ int			key_down(int keycode, t_mlx *map)
 	return (1);
 }
 
-void		key_move_fractal (int keycode, t_mlx *map)
+void	key_move_fractal(int keycode, t_mlx *map)
 {
-	double real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
-	double img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
+	double real_diff;
+	double img_diff;
+
+	real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
+	img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
 	if (keycode == 123)
 	{
 		map->f.MinRe += real_diff;
@@ -52,7 +67,8 @@ void		key_move_fractal (int keycode, t_mlx *map)
 		map->f.MaxIm -= img_diff;
 	}
 }
-int			key_long_press(int keycode, t_mlx *map)
+
+int		key_long_press(int keycode, t_mlx *map)
 {
 	key_move_fractal(keycode, map);
 	if (keycode == 12)

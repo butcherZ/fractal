@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ui.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: zyuan <marvin@42.fr>                       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/07/27 07:23:59 by zyuan             #+#    #+#             */
+/*   Updated: 2018/07/27 07:27:21 by zyuan            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "mlx.h"
 #include "fractol.h"
 #include "../libft/libft.h"
@@ -5,12 +17,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-void  fill_square(t_mlx *map, int width, int height, int color)
+void		fill_square(t_mlx *map, int width, int height, int color)
 {
-	int i;
-	int j;
+	int		i;
+	int		j;
 
-	i =	0;
+	i = 0;
 	j = 0;
 	while (j < height)
 	{
@@ -27,33 +39,37 @@ void  fill_square(t_mlx *map, int width, int height, int color)
 	}
 }
 
-void print_info(t_mlx *map)
+void		print_info(t_mlx *map)
 {
-	int var_color;
+	int		var_color;
 
 	var_color = 0xFFAFBD;
 	mlx_string_put(map->mlx, map->win, 15, 30, 0x74ebd5, "informations: ");
 	mlx_string_put(map->mlx, map->win, 35, 70, 0xFFFFFF, "current fractal: ");
 	mlx_string_put(map->mlx, map->win, 205, 70, var_color, map->argv);
 	mlx_string_put(map->mlx, map->win, 35, 100, 0xFFFFFF, "mouse X: ");
-	mlx_string_put(map->mlx, map->win, 125, 100, var_color, ft_itoa(map->info.mouse_x));
+	mlx_string_put(map->mlx, map->win, 125, 100, var_color,
+			ft_itoa(map->info.mouse_x));
 	mlx_string_put(map->mlx, map->win, 35, 130, 0xFFFFFF, "mouse Y: ");
-	mlx_string_put(map->mlx, map->win, 125, 130, var_color, ft_itoa(map->info.mouse_y));
+	mlx_string_put(map->mlx, map->win, 125, 130, var_color,
+			ft_itoa(map->info.mouse_y));
 	mlx_string_put(map->mlx, map->win, 35, 160, 0xFFFFFF, "Max iterations: ");
-	mlx_string_put(map->mlx, map->win, 195, 160, var_color, ft_itoa(map->f.MaxIterations));
+	mlx_string_put(map->mlx, map->win, 195, 160, var_color,
+			ft_itoa(map->f.MaxIterations));
 	mlx_string_put(map->mlx, map->win, 35, 190, 0xFFFFFF, "Zoom: ");
-	mlx_string_put(map->mlx, map->win, 95, 190, var_color, ft_itoa((pow(1.1, map->fac.count) * 100) - 10));
+	mlx_string_put(map->mlx, map->win, 95, 190, var_color,
+			ft_itoa((pow(1.1, map->fac.count) * 100) - 10));
 	mlx_string_put(map->mlx, map->win, 175, 190, 0xFFFFFF, "%");
 	mlx_string_put(map->mlx, map->win, 35, 220, 0xFFFFFF, "Freez Image: ");
-	if(map->freez == 0)
+	if (map->freez == 0)
 		mlx_string_put(map->mlx, map->win, 170, 220, var_color, "OFF");
 	else
 		mlx_string_put(map->mlx, map->win, 170, 220, var_color, "ON");
 }
 
-void print_control(t_mlx *map)
+void		print_control(t_mlx *map)
 {
-	int var_color;
+	int		var_color;
 
 	var_color = 0xFFAFBD;
 	mlx_string_put(map->mlx, map->win, 15, 300, 0x74ebd5, "Controls: ");
@@ -61,7 +77,8 @@ void print_control(t_mlx *map)
 	mlx_string_put(map->mlx, map->win, 35, 365, var_color, "Scroll up wheel");
 	mlx_string_put(map->mlx, map->win, 35, 390, 0xFFFFFF, "Zoom Out: ");
 	mlx_string_put(map->mlx, map->win, 35, 415, var_color, "Scroll down wheel");
-	mlx_string_put(map->mlx, map->win, 35, 440, 0xFFFFFF, "Move left / right: ");
+	mlx_string_put(map->mlx, map->win, 35, 440, 0xFFFFFF,
+			"Move left / right: ");
 	mlx_string_put(map->mlx, map->win, 35, 465, var_color, "left/right Arrow");
 	mlx_string_put(map->mlx, map->win, 35, 490, 0xFFFFFF, "Move up / down: ");
 	mlx_string_put(map->mlx, map->win, 35, 515, var_color, "up/ down Arrow ");
@@ -73,7 +90,7 @@ void print_control(t_mlx *map)
 	mlx_string_put(map->mlx, map->win, 35, 665, var_color, "Q/W");
 }
 
-void draw_ui(t_mlx *map)
+void		draw_ui(t_mlx *map)
 {
 	if (map->menu == ON)
 	{
@@ -84,7 +101,7 @@ void draw_ui(t_mlx *map)
 	}
 }
 
-void 		init_ui(t_mlx *map)
+void		init_ui(t_mlx *map)
 {
 	init_image_ui(map, MENU_WIDTH, MENU_HEIGHT);
 	fill_square(map, MENU_WIDTH, MENU_HEIGHT, 0x66181818);

@@ -6,7 +6,7 @@
 /*   By: zyuan <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/06/29 13:25:52 by zyuan             #+#    #+#             */
-/*   Updated: 2018/06/30 12:07:12 by zyuan            ###   ########.fr       */
+/*   Updated: 2018/07/27 07:23:35 by zyuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include <string.h>
 
 /*
-**	functions for setting up image.
+ **	functions for setting up image.
 */
 
 void		init_image(t_mlx *mlx, int width, int height)
@@ -37,16 +37,15 @@ void		init_image_ui(t_mlx *mlx, int width, int height)
 	byte_per_pixel = mlx->ui_img.bits_per_pixel / 8;
 	mlx->ui_img.img_ptr = mlx_new_image(mlx->mlx, width, height);
 	mlx->ui_img.addr = (int*)mlx_get_data_addr(mlx->ui_img.img_ptr,
-			&mlx->ui_img.bits_per_pixel, &mlx->ui_img.size_line, &mlx->ui_img.endian);
+			&mlx->ui_img.bits_per_pixel, &mlx->ui_img.size_line,
+			&mlx->ui_img.endian);
 }
-
 
 void		ui_img_put_pixel(t_mlx *mlx, int x, int y, int color)
 {
 	if ((x >= 0 && x <= MENU_WIDTH) && (y >= 0 && y <= MENU_HEIGHT))
 		mlx->ui_img.addr[y * (mlx->ui_img.size_line / 4) + x] = color;
 }
-
 
 void		img_put_pixel(t_mlx *mlx, int x, int y, int color)
 {
@@ -55,7 +54,7 @@ void		img_put_pixel(t_mlx *mlx, int x, int y, int color)
 }
 
 /*
-**	Change all the pixels to black.
+ **	Change all the pixels to black.
 */
 
 void		empty(t_mlx *mlx)
