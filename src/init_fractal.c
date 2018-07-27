@@ -70,6 +70,7 @@ void	init_var(t_mlx *map)
 	map->f.z_im = map->f.c_im;
 	map->f.isInside = 1;
 	map->f.n = 0;
+	map->color.color_style = STAR_DUST;
 }
 
 void	init_fractal(t_mlx *map)

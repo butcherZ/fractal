@@ -72,22 +72,22 @@ void		print_control(t_mlx *map)
 	int		var_color;
 
 	var_color = 0xFFAFBD;
-	mlx_string_put(map->mlx, map->win, 15, 300, 0x74ebd5, "Controls: ");
-	mlx_string_put(map->mlx, map->win, 35, 340, 0xFFFFFF, "Zoom In: ");
-	mlx_string_put(map->mlx, map->win, 35, 365, var_color, "Scroll up wheel");
-	mlx_string_put(map->mlx, map->win, 35, 390, 0xFFFFFF, "Zoom Out: ");
-	mlx_string_put(map->mlx, map->win, 35, 415, var_color, "Scroll down wheel");
-	mlx_string_put(map->mlx, map->win, 35, 440, 0xFFFFFF,
+	mlx_string_put(map->mlx, map->win, 15, 260, 0x74ebd5, "Controls: ");
+	/*mlx_string_put(map->mlx, map->win, 35, 300, 0xFFFFFF, "Zoom In: ");
+	mlx_string_put(map->mlx, map->win, 35, 325, var_color, "Scroll up wheel");
+	mlx_string_put(map->mlx, map->win, 35, 350, 0xFFFFFF, "Zoom Out: ");
+	mlx_string_put(map->mlx, map->win, 35, 375, var_color, "Scroll down wheel");
+	mlx_string_put(map->mlx, map->win, 35, 400, 0xFFFFFF,
 			"Move left / right: ");
-	mlx_string_put(map->mlx, map->win, 35, 465, var_color, "left/right Arrow");
-	mlx_string_put(map->mlx, map->win, 35, 490, 0xFFFFFF, "Move up / down: ");
-	mlx_string_put(map->mlx, map->win, 35, 515, var_color, "up/ down Arrow ");
-	mlx_string_put(map->mlx, map->win, 35, 540, 0xFFFFFF, "Freez Image: ");
-	mlx_string_put(map->mlx, map->win, 35, 565, var_color, "left click mouse");
-	mlx_string_put(map->mlx, map->win, 35, 590, 0xFFFFFF, "Hide / Show menu: ");
-	mlx_string_put(map->mlx, map->win, 35, 615, var_color, "right click mouse");
-	mlx_string_put(map->mlx, map->win, 35, 640, 0xFFFFFF, "+ / - iterations: ");
-	mlx_string_put(map->mlx, map->win, 35, 665, var_color, "Q/W");
+	mlx_string_put(map->mlx, map->win, 35, 425, var_color, "left/right Arrow");
+	mlx_string_put(map->mlx, map->win, 35, 450, 0xFFFFFF, "Move up / down: ");
+	mlx_string_put(map->mlx, map->win, 35, 475, var_color, "up/ down Arrow ");*/
+	mlx_string_put(map->mlx, map->win, 35, 300, 0xFFFFFF, "Freez Image: ");
+	mlx_string_put(map->mlx, map->win, 35, 325, var_color, "left click mouse");
+	mlx_string_put(map->mlx, map->win, 35, 350, 0xFFFFFF, "Hide / Show menu: ");
+	mlx_string_put(map->mlx, map->win, 35, 375, var_color, "right click mouse");
+	mlx_string_put(map->mlx, map->win, 35, 400, 0xFFFFFF, "+ / - iterations: ");
+	mlx_string_put(map->mlx, map->win, 35, 425, var_color, "Q/W");
 }
 
 void		draw_ui(t_mlx *map)

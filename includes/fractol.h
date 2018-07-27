@@ -25,12 +25,15 @@
 # define MENU_WIDTH WIN_WIDTH / 4
 # define MENU_HEIGHT WIN_HEIGHT
 
-# define JULIA 1
-# define MANDELBROT 2
-# define BURNINGSHIP 3
+# define JULIA 2
+# define MANDELBROT 3
+# define BURNINGSHIP 4
 
 # define ON 1
 # define OFF 0
+
+# define DEFUALT 5
+# define STAR_DUST 6
 
 typedef struct	s_img
 {
@@ -80,6 +83,7 @@ typedef	struct	s_color
 	int			g;
 	int			b;
 	float		t;
+	int			color_style;
 }				t_color;
 
 typedef	struct	s_info

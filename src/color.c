@@ -23,7 +23,7 @@ unsigned long	create_rgb(int r, int g, int b)
 }
 
 /*
- ** https://solarianprogrammer.com/2013/02/28/mandelbrot-set-cpp-11/
+** https://solarianprogrammer.com/2013/02/28/mandelbrot-set-cpp-11/
 */
 
 void			get_color(t_mlx *map)
@@ -31,9 +31,18 @@ void			get_color(t_mlx *map)
 	float	t;
 
 	t = (float)map->f.n / (float)map->f.MaxIterations;
-	map->color.r = (int)(9 * (1 - t) * t * t * t * 255);
-	map->color.g = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
-	map->color.b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
+	if (map->color.color_style == DEFUALT)
+	{
+		map->color.r = (int)(9 * (1 - t) * t * t * t * 255);
+		map->color.g = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
+		map->color.b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 255);
+	}
+	if (map->color.color_style == STAR_DUST)
+	{
+		map->color.r = (int)(9 * (1 - t) * t * 112);
+		map->color.g = (int)(15 * (1 - t) * (1 - t) * t * t * 250);
+		map->color.b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * 179);
+	}
 }
 
 void			draw(t_mlx *map, int x, int y)
