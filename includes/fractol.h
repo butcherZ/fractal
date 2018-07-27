@@ -7,7 +7,6 @@
 # define WIN_WIDTH 1300
 # define WIN_HEIGHT 800
 
-//# define IMG_WIDTH (WIN_WIDTH - WIN_WIDTH / 4)
 # define IMG_WIDTH WIN_WIDTH
 # define IMG_HEIGHT WIN_HEIGHT
 
@@ -110,7 +109,71 @@ void			empty(t_mlx *mlx);
 void		init_image_ui(t_mlx *mlx, int width, int height);
 void		ui_img_put_pixel(t_mlx *mlx, int x, int y, int color);
 
-void draw_ui(t_mlx *map);
+void 		draw_ui(t_mlx *map);
 void 		init_ui(t_mlx *map);
 
+/*
+**  init fractals init_fractal.c
+*/
+
+void	init_mandelbrot(t_mlx *map);
+void	init_julia(t_mlx *map);
+void	init_burningship(t_mlx *map);
+void	init_var(t_mlx *map);
+void	init_fractal(t_mlx *map);
+
+/*
+**  core algorithem escape_time.c
+*/
+
+void check_map(t_mlx *map);
+void loop_through(t_mlx *map);
+void set_factor(t_mlx *map);
+void increase_iterations(t_mlx *map);
+void escape_time(t_mlx *map);
+
+/*
+**  set colors and draw fractals color.c
+*/
+
+unsigned long createRGB(int r, int g, int b);
+void get_color(t_mlx *map);
+void draw(t_mlx *map, int x, int y);
+
+/*
+**  draw ui and print info ui.c
+*/
+
+void	fill_square(t_mlx *map, int width, int height, int color);
+void	print_info(t_mlx *map);
+void	print_control(t_mlx *map);
+void 	init_ui(t_mlx *map);
+void	draw_ui(t_mlx *map);
+
+/*
+**  key_hook.c
+*/
+
+int			key_down(int keycode, t_mlx *map);
+void		key_move_fractal (int keycode, t_mlx *map);
+int			key_long_press(int keycode, t_mlx *map);
+
+
+/*
+**  mouse_hook.c
+*/
+
+void	translate_fractal(int x, int y, t_mlx *map);
+int		mouse_move(int x, int y, t_mlx *map);
+void	zoom_on_cursor(int button, int x, int y, t_mlx *map);
+int 	mouse_wheel(int button, int x, int y, t_mlx *map);
+
+/*
+**  main.c
+*/
+
+void 		print_usage(void);
+void		check_input(t_mlx *map);
+void		set_env(t_mlx *map);
+void		call_everything_in_main(t_mlx *map);
 #endif

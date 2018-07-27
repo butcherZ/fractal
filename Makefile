@@ -14,7 +14,13 @@ NAME = fractol
 
 #src / obj files
 SRC = main.c \
-	  	set_up_image.c \
+	  set_up_image.c \
+	  init_fractal.c \
+	  escape_time.c \
+	  color.c \
+	  ui.c \
+	  key_hook.c \
+	  mouse_hook.c \
 
 OBJ = $(addprefix $(OBJDIR),$(SRC:.c=.o))
 
