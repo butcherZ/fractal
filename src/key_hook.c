@@ -19,14 +19,20 @@
 
 int		key_down(int keycode, t_mlx *map)
 {
+	printf("keycode is %d\n", keycode);
 	if (keycode == 10)
 	{
 		init_fractal(map);
 		map->animated = 0;
 	}
-	if (keycode == 48)
+	if (keycode == 18)
 	{
-		map->trigger = (map->trigger + 1) % 2;
+		map->color.color_style = DEFUALT;
+		printf("lalalala\n");
+	}
+	if (keycode == 19)
+	{
+		map->color.color_style = STAR_DUST;
 	}
 	if (keycode == 53)
 	{
