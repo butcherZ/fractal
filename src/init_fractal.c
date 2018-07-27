@@ -39,9 +39,9 @@ void	init_mandelbrot(t_mlx *map)
 
 void	init_julia(t_mlx *map)
 {
-	map->f.MinRe = -3.91;
-	map->f.MaxRe = 5.49;
-	map->f.MinIm = -2.9;
+	map->f.MinRe = -4.24;
+	map->f.MaxRe = 2.81;
+	map->f.MinIm = -2.14;
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe)
 		* IMG_HEIGHT / IMG_WIDTH;
 	map->f.MaxIterations = 80;
@@ -52,9 +52,9 @@ void	init_julia(t_mlx *map)
 
 void	init_burningship(t_mlx *map)
 {
-	map->f.MinRe = -2.54;
-	map->f.MaxRe = 3.29;
-	map->f.MinIm = -1.43;
+	map->f.MinRe = -3.70;
+	map->f.MaxRe = 2.12;
+	map->f.MinIm = -1.60;
 	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe)
 		* IMG_HEIGHT / IMG_WIDTH;
 	map->f.MaxIterations = 80;

@@ -19,7 +19,7 @@
 
 int		key_down(int keycode, t_mlx *map)
 {
-	if (keycode == 50)
+	if (keycode == 10)
 	{
 		init_fractal(map);
 		map->animated = 0;
