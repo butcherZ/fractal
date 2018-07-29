@@ -6,14 +6,13 @@
 /*   By: zyuan <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/27 06:59:19 by zyuan             #+#    #+#             */
-/*   Updated: 2018/07/27 07:01:21 by zyuan            ###   ########.fr       */
+/*   Updated: 2018/07/30 00:19:33 by zyuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
 #include "fractol.h"
 #include "../libft/libft.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -80,14 +79,12 @@ void		increase_iterations(t_mlx *map)
 		if (map->info.mouse_button == 5 && map->flag == 0
 			&& map->f.max_iterations < 5000)
 		{
-			printf("this is 5\n");
 			map->flag = 1;
 			map->f.max_iterations += 20;
 		}
 		if (map->info.mouse_button == 4 && map->flag == 0
 			&& map->f.max_iterations >= 20)
 		{
-			printf("this is 4\n");
 			map->flag = 1;
 			map->f.max_iterations -= 20;
 		}
