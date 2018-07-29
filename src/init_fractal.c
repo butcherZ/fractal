@@ -36,6 +36,7 @@ void	init_mandelbrot(t_mlx *map)
 	map->f.cr = 0;
 	map->f.ci = 0;
 	map->color.color_style = DEFAULT;
+	map->info.mouse_button = 100;
 }
 
 void	init_julia(t_mlx *map)
@@ -50,6 +51,7 @@ void	init_julia(t_mlx *map)
 	map->f.cr = -0.70176;
 	map->f.ci = -0.3842;
 	map->color.color_style = DEFAULT;
+	map->info.mouse_button = 100;
 }
 
 void	init_burningship(t_mlx *map)
@@ -64,6 +66,7 @@ void	init_burningship(t_mlx *map)
 	map->f.cr = 0;
 	map->f.ci = 0;
 	map->color.color_style = DEFAULT;
+	map->info.mouse_button = 100;
 }
 
 void	init_var(t_mlx *map)

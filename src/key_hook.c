@@ -87,11 +87,11 @@ void	key_move_fractal(int keycode, t_mlx *map)
 int		key_long_press(int keycode, t_mlx *map)
 {
 	key_move_fractal(keycode, map);
-	if (keycode == 12)
+	if (keycode == 12 && map->f.max_iterations < 5000)
 	{
 		map->f.max_iterations += 10;
 	}
-	if (keycode == 13)
+	if (keycode == 13 && map->f.max_iterations > 10)
 	{
 		map->f.max_iterations -= 10;
 	}

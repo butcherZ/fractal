@@ -100,7 +100,7 @@ int			main(int argc, char *argv[])
 	call_everything_in_main(&map);
 	mlx_key_hook(map.win, key_down, &map);
 	mlx_hook(map.win, 2, 0, key_long_press, &map);
-	mlx_hook(map.win, 4, 0, mouse_wheel, &map);
+	mlx_hook(map.win, 4, 0, mouse_click, &map);
 	mlx_hook(map.win, 6, 0, mouse_move, &map);
 	mlx_loop(map.mlx);
 	return (0);

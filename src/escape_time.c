@@ -74,19 +74,21 @@ void		set_factor(t_mlx *map)
 
 void		increase_iterations(t_mlx *map)
 {
-	int flag;
-
-	flag = 0;
+	map->flag = 0;
 	if (map->fac.count % 30 == 0)
 	{
-		if (map->info.mouse_button == 5 && flag == 0)
+		if (map->info.mouse_button == 5 && map->flag == 0
+			&& map->f.max_iterations < 5000)
 		{
-			flag = 1;
+			printf("this is 5\n");
+			map->flag = 1;
 			map->f.max_iterations += 20;
 		}
-		if (map->info.mouse_button == 4 && flag == 0)
+		if (map->info.mouse_button == 4 && map->flag == 0
+			&& map->f.max_iterations >= 20)
 		{
-			flag = 1;
+			printf("this is 4\n");
+			map->flag = 1;
 			map->f.max_iterations -= 20;
 		}
 	}

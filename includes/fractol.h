@@ -110,7 +110,7 @@ typedef struct	s_mlx
 	int			total;
 	char		*argv;
 	int			input;
-	int			animated;
+	int			flag;
 	int			menu;
 	int			freeze;
 }				t_mlx;
@@ -179,7 +179,7 @@ int				key_long_press(int keycode, t_mlx *map);
 void			translate_fractal(int x, int y, t_mlx *map);
 int				mouse_move(int x, int y, t_mlx *map);
 void			zoom_on_cursor(int button, int x, int y, t_mlx *map);
-int				mouse_wheel(int button, int x, int y, t_mlx *map);
+int				mouse_click(int button, int x, int y, t_mlx *map);
 
 /*
 **  main.c

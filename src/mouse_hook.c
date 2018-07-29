@@ -106,7 +106,7 @@ void		zoom_on_cursor(int button, int x, int y, t_mlx *map)
 	}
 }
 
-int			mouse_wheel(int button, int x, int y, t_mlx *map)
+int			mouse_click(int button, int x, int y, t_mlx *map)
 {
 	map->info.mouse_button = button;
 	zoom_on_cursor(button, x, y, map);
