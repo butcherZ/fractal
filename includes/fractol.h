@@ -149,6 +149,7 @@ void			escape_time(t_mlx *map);
 **  set colors and draw fractals color.c
 */
 
+void			fill_square(t_mlx *map, int width, int height, int color);
 unsigned long	create_rgb(int r, int g, int b);
 void			get_color(t_mlx *map);
 void			draw(t_mlx *map, int x, int y);
@@ -157,7 +158,7 @@ void			draw(t_mlx *map, int x, int y);
 **  draw ui and print info ui.c
 */
 
-void			fill_square(t_mlx *map, int width, int height, int color);
+void			convert(t_mlx *map);
 void			print_info(t_mlx *map);
 void			print_control(t_mlx *map);
 void			init_ui(t_mlx *map);

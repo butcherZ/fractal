@@ -33,7 +33,7 @@ void		print_usage(void)
 	ft_putstr("pass fractal's name as argument to lauch desired fractal\n");
 	ft_putstr("Options are :\n");
 	ft_putstr("- julia\n- mandelbrot\n- burningship\n");
-	ft_putstr("Example: ./fractol julia");
+	ft_putstr("Example: ./fractol julia\n");
 }
 
 void		check_input(t_mlx *map)

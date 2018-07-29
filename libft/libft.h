@@ -91,5 +91,7 @@ char				*ft_strtrim(const char *s);
 char				*ft_itoa(int n);
 char				**ft_strsplit(char const *s, char c);
 int					get_next_line(int fd, char **line);
+void				reverse(char s[]);
+void				itoa_fractol(int n, char s[]);
 
 #endif

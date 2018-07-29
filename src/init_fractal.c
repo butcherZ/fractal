@@ -32,7 +32,7 @@ void	init_mandelbrot(t_mlx *map)
 	map->f.max_im = map->f.min_im + (map->f.max_re - map->f.min_re)
 		* IMG_HEIGHT / IMG_WIDTH;
 	map->f.max_iterations = 80;
-	map->fac.count = 1;
+	map->fac.count = 0;
 	map->f.cr = 0;
 	map->f.ci = 0;
 	map->color.color_style = DEFAULT;
@@ -46,7 +46,7 @@ void	init_julia(t_mlx *map)
 	map->f.max_im = map->f.min_im + (map->f.max_re - map->f.min_re)
 		* IMG_HEIGHT / IMG_WIDTH;
 	map->f.max_iterations = 80;
-	map->fac.count = 1;
+	map->fac.count = 0;
 	map->f.cr = -0.70176;
 	map->f.ci = -0.3842;
 	map->color.color_style = DEFAULT;
@@ -60,7 +60,7 @@ void	init_burningship(t_mlx *map)
 	map->f.max_im = map->f.min_im + (map->f.max_re - map->f.min_re)
 		* IMG_HEIGHT / IMG_WIDTH;
 	map->f.max_iterations = 80;
-	map->fac.count = 1;
+	map->fac.count = 0;
 	map->f.cr = 0;
 	map->f.ci = 0;
 	map->color.color_style = DEFAULT;

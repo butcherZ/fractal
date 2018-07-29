@@ -13,9 +13,30 @@
 #include "mlx.h"
 #include "fractol.h"
 #include "../libft/libft.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+void			fill_square(t_mlx *map, int width, int height, int color)
+{
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	while (j < height)
+	{
+		if (i < width)
+		{
+			ui_img_put_pixel(map, i, j, color);
+			i++;
+		}
+		else
+		{
+			i = 0;
+			j++;
+		}
+	}
+}
 
 unsigned long	create_rgb(int r, int g, int b)
 {

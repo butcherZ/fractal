@@ -13,30 +13,34 @@
 #include "mlx.h"
 #include "fractol.h"
 #include "../libft/libft.h"
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
-void		fill_square(t_mlx *map, int width, int height, int color)
+void		convert(t_mlx *map)
 {
-	int		i;
-	int		j;
+	int		var_color;
+	char	s_mouse_x[5];
+	char	s_mouse_y[5];
+	char	s_max_iterations[10];
+	char	s_zoom[10];
 
-	i = 0;
-	j = 0;
-	while (j < height)
+	var_color = 0xFFAFBD;
+	itoa_fractol(map->info.mouse_x, s_mouse_x);
+	itoa_fractol(map->info.mouse_y, s_mouse_y);
+	itoa_fractol(map->f.max_iterations, s_max_iterations);
+	mlx_string_put(map->mlx, map->win, 125, 100, var_color, s_mouse_x);
+	mlx_string_put(map->mlx, map->win, 125, 130, var_color, s_mouse_y);
+	mlx_string_put(map->mlx, map->win, 195, 160, var_color, s_max_iterations);
+	if (pow(1.1, map->fac.count) * 100 < INT_MAX)
 	{
-		if (i < width)
-		{
-			ui_img_put_pixel(map, i, j, color);
-			i++;
-		}
-		else
-		{
-			i = 0;
-			j++;
-		}
+		itoa_fractol(pow(1.1, map->fac.count) * 100, s_zoom);
+		mlx_string_put(map->mlx, map->win, 95, 190, var_color, s_zoom);
+		mlx_string_put(map->mlx, map->win, 195, 190, 0xFFFFFF, "%");
 	}
+	else
+		mlx_string_put(map->mlx, map->win, 95, 190, var_color,
+			"Too big number");
 }
 
 void		print_info(t_mlx *map)
@@ -44,22 +48,14 @@ void		print_info(t_mlx *map)
 	int		var_color;
 
 	var_color = 0xFFAFBD;
+	convert(map);
 	mlx_string_put(map->mlx, map->win, 15, 30, 0x74ebd5, "informations: ");
 	mlx_string_put(map->mlx, map->win, 35, 70, 0xFFFFFF, "current fractal: ");
 	mlx_string_put(map->mlx, map->win, 205, 70, var_color, map->argv);
 	mlx_string_put(map->mlx, map->win, 35, 100, 0xFFFFFF, "mouse X: ");
-	mlx_string_put(map->mlx, map->win, 125, 100, var_color,
-			ft_itoa(map->info.mouse_x));
 	mlx_string_put(map->mlx, map->win, 35, 130, 0xFFFFFF, "mouse Y: ");
-	mlx_string_put(map->mlx, map->win, 125, 130, var_color,
-			ft_itoa(map->info.mouse_y));
 	mlx_string_put(map->mlx, map->win, 35, 160, 0xFFFFFF, "Max iterations: ");
-	mlx_string_put(map->mlx, map->win, 195, 160, var_color,
-			ft_itoa(map->f.max_iterations));
 	mlx_string_put(map->mlx, map->win, 35, 190, 0xFFFFFF, "Zoom: ");
-	mlx_string_put(map->mlx, map->win, 95, 190, var_color,
-			ft_itoa((pow(1.1, map->fac.count) * 100) - 10));
-	mlx_string_put(map->mlx, map->win, 175, 190, 0xFFFFFF, "%");
 	mlx_string_put(map->mlx, map->win, 35, 220, 0xFFFFFF, "Freeze Image: ");
 	if (map->freeze == 0)
 		mlx_string_put(map->mlx, map->win, 175, 220, var_color, "OFF");

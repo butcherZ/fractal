@@ -43,7 +43,6 @@ int		key_down(int keycode, t_mlx *map)
 	if (keycode == 50)
 	{
 		init_fractal(map);
-		map->animated = 0;
 	}
 	if (keycode == 53)
 	{
@@ -90,11 +89,11 @@ int		key_long_press(int keycode, t_mlx *map)
 	key_move_fractal(keycode, map);
 	if (keycode == 12)
 	{
-		map->f.max_iterations += 1;
+		map->f.max_iterations += 10;
 	}
 	if (keycode == 13)
 	{
-		map->f.max_iterations -= 1;
+		map->f.max_iterations -= 10;
 	}
 	empty(map);
 	escape_time(map);

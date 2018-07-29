@@ -82,15 +82,19 @@ void		increase_iterations(t_mlx *map)
 		if (map->info.mouse_button == 5 && flag == 0)
 		{
 			flag = 1;
-			map->f.max_iterations *= 1.2;
+			map->f.max_iterations += 20;
 		}
 		if (map->info.mouse_button == 4 && flag == 0)
 		{
 			flag = 1;
-			map->f.max_iterations /= 1.2;
+			map->f.max_iterations -= 20;
 		}
 	}
 }
+
+/*
+** remove increase_iterations() in escape_time to gain more speed of the program
+*/
 
 void		escape_time(t_mlx *map)
 {
