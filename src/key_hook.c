@@ -19,7 +19,7 @@
 
 int		key_down(int keycode, t_mlx *map)
 {
-	printf("keycode is %d\n", keycode);
+	// printf("keycode is %d\n", keycode);
 	if (keycode == 10)
 	{
 		init_fractal(map);
@@ -27,7 +27,7 @@ int		key_down(int keycode, t_mlx *map)
 	}
 	if (keycode == 18)
 	{
-		map->color.color_style = DEFUALT;
+		map->color.color_style = DEFAULT;
 	}
 	if (keycode == 19)
 	{
@@ -36,6 +36,10 @@ int		key_down(int keycode, t_mlx *map)
 	if (keycode == 20)
 	{
 		map->color.color_style = BLOODY_HELL;
+	}
+	if (keycode == 21)
+	{
+		map->color.color_style = CRAZY_MODE;
 	}
 	if (keycode == 53)
 	{

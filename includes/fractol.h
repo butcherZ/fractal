@@ -32,9 +32,10 @@
 # define ON 1
 # define OFF 0
 
-# define DEFUALT 5
+# define DEFAULT 5
 # define STAR_DUST 6
 #	define BLOODY_HELL 7
+# define CRAZY_MODE 8
 
 typedef struct	s_img
 {

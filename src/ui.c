@@ -73,7 +73,7 @@ void		print_control(t_mlx *map)
 
 	var_color = 0xFFAFBD;
 	mlx_string_put(map->mlx, map->win, 15, 260, 0x74ebd5, "Controls: ");
-	/*mlx_string_put(map->mlx, map->win, 35, 300, 0xFFFFFF, "Zoom In: ");
+	mlx_string_put(map->mlx, map->win, 35, 300, 0xFFFFFF, "Zoom In: ");
 	mlx_string_put(map->mlx, map->win, 35, 325, var_color, "Scroll up wheel");
 	mlx_string_put(map->mlx, map->win, 35, 350, 0xFFFFFF, "Zoom Out: ");
 	mlx_string_put(map->mlx, map->win, 35, 375, var_color, "Scroll down wheel");
@@ -81,13 +81,20 @@ void		print_control(t_mlx *map)
 			"Move left / right: ");
 	mlx_string_put(map->mlx, map->win, 35, 425, var_color, "left/right Arrow");
 	mlx_string_put(map->mlx, map->win, 35, 450, 0xFFFFFF, "Move up / down: ");
-	mlx_string_put(map->mlx, map->win, 35, 475, var_color, "up/ down Arrow ");*/
-	mlx_string_put(map->mlx, map->win, 35, 300, 0xFFFFFF, "Freez Image: ");
-	mlx_string_put(map->mlx, map->win, 35, 325, var_color, "left click mouse");
-	mlx_string_put(map->mlx, map->win, 35, 350, 0xFFFFFF, "Hide / Show menu: ");
-	mlx_string_put(map->mlx, map->win, 35, 375, var_color, "right click mouse");
-	mlx_string_put(map->mlx, map->win, 35, 400, 0xFFFFFF, "+ / - iterations: ");
-	mlx_string_put(map->mlx, map->win, 35, 425, var_color, "Q/W");
+	mlx_string_put(map->mlx, map->win, 35, 475, var_color, "up/ down Arrow ");
+	mlx_string_put(map->mlx, map->win, 35, 500, 0xFFFFFF, "Freez Image: ");
+	mlx_string_put(map->mlx, map->win, 35, 525, var_color, "left click mouse");
+	mlx_string_put(map->mlx, map->win, 35, 550, 0xFFFFFF, "Hide / Show menu: ");
+	mlx_string_put(map->mlx, map->win, 35, 575, var_color, "right click mouse");
+	mlx_string_put(map->mlx, map->win, 35, 600, 0xFFFFFF, "+ / - iterations: ");
+	mlx_string_put(map->mlx, map->win, 35, 625, var_color, "Q/W");
+	mlx_string_put(map->mlx, map->win, 15, 665, 0x74ebd5, "Color Styles: ");
+	mlx_string_put(map->mlx, map->win, 35, 695, 0xFFFFFF, "Default: ");
+	mlx_string_put(map->mlx, map->win, 170, 695, var_color, "1");
+	mlx_string_put(map->mlx, map->win, 35, 720, 0xFFFFFF, "Star Dust: ");
+	mlx_string_put(map->mlx, map->win, 170, 720, var_color, "2");
+	mlx_string_put(map->mlx, map->win, 35, 745, 0xFFFFFF, "Bloody Hell: ");
+	mlx_string_put(map->mlx, map->win, 170, 745, var_color, "3");
 }
 
 void		draw_ui(t_mlx *map)
