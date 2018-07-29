@@ -17,14 +17,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-int		key_down(int keycode, t_mlx *map)
+void	color_style(int keycode, t_mlx *map)
 {
-	// printf("keycode is %d\n", keycode);
-	if (keycode == 10)
-	{
-		init_fractal(map);
-		map->animated = 0;
-	}
 	if (keycode == 18)
 	{
 		map->color.color_style = DEFAULT;
@@ -40,6 +34,16 @@ int		key_down(int keycode, t_mlx *map)
 	if (keycode == 21)
 	{
 		map->color.color_style = CRAZY_MODE;
+	}
+}
+
+int		key_down(int keycode, t_mlx *map)
+{
+	color_style(keycode, map);
+	if (keycode == 50)
+	{
+		init_fractal(map);
+		map->animated = 0;
 	}
 	if (keycode == 53)
 	{
@@ -57,27 +61,27 @@ void	key_move_fractal(int keycode, t_mlx *map)
 	double real_diff;
 	double img_diff;
 
-	real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
-	img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
+	real_diff = fabs(map->f.min_re - map->f.max_re) * 0.05;
+	img_diff = fabs(map->f.min_im - map->f.max_im) * 0.05;
 	if (keycode == 123)
 	{
-		map->f.MinRe += real_diff;
-		map->f.MaxRe += real_diff;
+		map->f.min_re += real_diff;
+		map->f.max_re += real_diff;
 	}
 	if (keycode == 124)
 	{
-		map->f.MinRe -= real_diff;
-		map->f.MaxRe -= real_diff;
+		map->f.min_re -= real_diff;
+		map->f.max_re -= real_diff;
 	}
 	if (keycode == 125)
 	{
-		map->f.MinIm += img_diff;
-		map->f.MaxIm += img_diff;
+		map->f.min_im += img_diff;
+		map->f.max_im += img_diff;
 	}
 	if (keycode == 126)
 	{
-		map->f.MinIm -= img_diff;
-		map->f.MaxIm -= img_diff;
+		map->f.min_im -= img_diff;
+		map->f.max_im -= img_diff;
 	}
 }
 
@@ -86,11 +90,11 @@ int		key_long_press(int keycode, t_mlx *map)
 	key_move_fractal(keycode, map);
 	if (keycode == 12)
 	{
-		map->f.MaxIterations += 1;
+		map->f.max_iterations += 1;
 	}
 	if (keycode == 13)
 	{
-		map->f.MaxIterations -= 1;
+		map->f.max_iterations -= 1;
 	}
 	empty(map);
 	escape_time(map);

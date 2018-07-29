@@ -62,7 +62,7 @@ void		check_input(t_mlx *map)
 void		set_env(t_mlx *map)
 {
 	map->index = 0;
-	map->freez = OFF;
+	map->freeze = OFF;
 	map->info.mouse_x = 0;
 	map->info.mouse_y = 0;
 	map->fac.count = 0;

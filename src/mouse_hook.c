@@ -22,27 +22,27 @@ void		translate_fractal(int x, int y, t_mlx *map)
 	double	real_diff;
 	double	img_diff;
 
-	real_diff = fabs(map->f.MinRe - map->f.MaxRe) * 0.05;
-	img_diff = fabs(map->f.MinIm - map->f.MaxIm) * 0.05;
-	if (x > MENU_WIDTH && x < (MENU_WIDTH + 20) && map->freez == 1)
+	real_diff = fabs(map->f.min_re - map->f.max_re) * 0.05;
+	img_diff = fabs(map->f.min_im - map->f.max_im) * 0.05;
+	if (x > MENU_WIDTH && x < (MENU_WIDTH + 20) && map->freeze == 1)
 	{
-		map->f.MinRe -= real_diff;
-		map->f.MaxRe -= real_diff;
+		map->f.min_re -= real_diff;
+		map->f.max_re -= real_diff;
 	}
-	if (x < WIN_WIDTH && x > (WIN_WIDTH - 20) && map->freez == 1)
+	if (x < WIN_WIDTH && x > (WIN_WIDTH - 20) && map->freeze == 1)
 	{
-		map->f.MinRe += real_diff;
-		map->f.MaxRe += real_diff;
+		map->f.min_re += real_diff;
+		map->f.max_re += real_diff;
 	}
-	if (y < 20 && y > 0 && map->freez == 1)
+	if (y < 20 && y > 0 && map->freeze == 1)
 	{
-		map->f.MinIm += img_diff;
-		map->f.MaxIm += img_diff;
+		map->f.min_im += img_diff;
+		map->f.max_im += img_diff;
 	}
-	if (y < WIN_HEIGHT && y > (WIN_HEIGHT - 20) && map->freez == 1)
+	if (y < WIN_HEIGHT && y > (WIN_HEIGHT - 20) && map->freeze == 1)
 	{
-		map->f.MinIm -= img_diff;
-		map->f.MaxIm -= img_diff;
+		map->f.min_im -= img_diff;
+		map->f.max_im -= img_diff;
 	}
 }
 
@@ -59,7 +59,9 @@ void		translate_fractal(int x, int y, t_mlx *map)
 ** y + 1, ci + abs(-2 / IMG_HEIGHT)
 ** x + 1 = cr + abs(-2 / IMG_WIDTH)
 ** x = 0, cr = -2
-** x = 10, cr = -2 + 10 * abs(2 / IMG_WIDTH)
+** x = 10, cr = -2 + 10 * abs( -2 / IMG_WIDTH)
+** cr = -2 + x * abs( -2 /IMG_WIDTH);
+** cr = x * (-2/ IMG_WIDTH) -2 ;
 */
 
 int			mouse_move(int x, int y, t_mlx *map)
@@ -67,10 +69,10 @@ int			mouse_move(int x, int y, t_mlx *map)
 	map->info.mouse_x = x;
 	map->info.mouse_y = y;
 	translate_fractal(x, y, map);
-	if (map->input == JULIA && map->freez == 0)
+	if (map->input == JULIA && map->freeze == 0)
 	{
-		map->f.cr = (double)x * 2 / IMG_WIDTH - 2;
-		map->f.ci = (double)y * 2 / IMG_HEIGHT - 2;
+		map->f.cr = (double)x * 4 / IMG_WIDTH - 2;
+		map->f.ci = (double)y * 4 / IMG_HEIGHT - 2;
 	}
 	empty(map);
 	escape_time(map);
@@ -83,25 +85,25 @@ void		zoom_on_cursor(int button, int x, int y, t_mlx *map)
 	double	cursor_x;
 	double	cursor_y;
 
-	cursor_x = map->f.MinRe + (x * ((map->f.MaxRe - map->f.MinRe)
+	cursor_x = map->f.min_re + (x * ((map->f.max_re - map->f.min_re)
 				/ IMG_WIDTH));
-	cursor_y = map->f.MaxIm - (y * ((map->f.MaxIm - map->f.MinIm)
+	cursor_y = map->f.max_im - (y * ((map->f.max_im - map->f.min_im)
 				/ IMG_HEIGHT));
 	if (button == 4)
 	{
 		map->fac.count -= 1;
-		map->f.MinRe = cursor_x - ((cursor_x - map->f.MinRe) * 1.1);
-		map->f.MaxRe = cursor_x + ((map->f.MaxRe - cursor_x) * 1.1);
-		map->f.MinIm = cursor_y - ((cursor_y - map->f.MinIm) * 1.1);
-		map->f.MaxIm = cursor_y + ((map->f.MaxIm - cursor_y) * 1.1);
+		map->f.min_re = cursor_x - ((cursor_x - map->f.min_re) * 1.1);
+		map->f.max_re = cursor_x + ((map->f.max_re - cursor_x) * 1.1);
+		map->f.min_im = cursor_y - ((cursor_y - map->f.min_im) * 1.1);
+		map->f.max_im = cursor_y + ((map->f.max_im - cursor_y) * 1.1);
 	}
 	if (button == 5)
 	{
 		map->fac.count += 1;
-		map->f.MinRe = cursor_x - ((cursor_x - map->f.MinRe) / 1.1);
-		map->f.MaxRe = cursor_x + ((map->f.MaxRe - cursor_x) / 1.1);
-		map->f.MinIm = cursor_y - ((cursor_y - map->f.MinIm) / 1.1);
-		map->f.MaxIm = cursor_y + ((map->f.MaxIm - cursor_y) / 1.1);
+		map->f.min_re = cursor_x - ((cursor_x - map->f.min_re) / 1.1);
+		map->f.max_re = cursor_x + ((map->f.max_re - cursor_x) / 1.1);
+		map->f.min_im = cursor_y - ((cursor_y - map->f.min_im) / 1.1);
+		map->f.max_im = cursor_y + ((map->f.max_im - cursor_y) / 1.1);
 	}
 }
 
@@ -110,7 +112,7 @@ int			mouse_wheel(int button, int x, int y, t_mlx *map)
 	map->info.mouse_button = button;
 	zoom_on_cursor(button, x, y, map);
 	if (button == 1)
-		map->freez = (map->freez + 1) % 2;
+		map->freeze = (map->freeze + 1) % 2;
 	if (button == 2)
 		map->menu = (map->menu + 1) % 2;
 	empty(map);

@@ -30,7 +30,7 @@ void			get_color(t_mlx *map)
 {
 	float	t;
 
-	t = (float)map->f.n / (float)map->f.MaxIterations;
+	t = (float)map->f.n / (float)map->f.max_iterations;
 	if (map->color.color_style == DEFAULT)
 	{
 		map->color.r = (int)(9 * (1 - t) * t * t * t * 255);
@@ -49,12 +49,6 @@ void			get_color(t_mlx *map)
 		map->color.g = (int)(15 * (1 - t) * (1 - t) * t * t * 255);
 		map->color.b = (int)(8.5 * (1 - t) * (1 - t) * (1 - t) * t * t * 205);
 	}
-	if (map->color.color_style == CRAZY_MODE)
-	{
-		map->color.r = (int)(9 * (1 - t) * t * t * t * 255);
-		map->color.g = 30;
-		map->color.b = (int)150;//(rand() % 100);
-	}
 }
 
 void			draw(t_mlx *map, int x, int y)
@@ -62,7 +56,7 @@ void			draw(t_mlx *map, int x, int y)
 	int		i;
 
 	i = 0;
-	if (map->f.isInside != 1)
+	if (map->f.is_inside != 1)
 	{
 		if (i < IMG_WIDTH * IMG_HEIGHT)
 		{

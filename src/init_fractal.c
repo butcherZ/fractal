@@ -18,60 +18,60 @@
 #include <string.h>
 
 /*
-**	MinRe left (x)
-**	MaxRe right (x)
-**	MinIm top (y)
-**	MaxIm buttom (y)
+**	min_re left (x)
+**	max_re right (x)
+**	min_im top (y)
+**	max_im buttom (y)
 */
 
 void	init_mandelbrot(t_mlx *map)
 {
-	map->f.MinRe = -2.55;
-	map->f.MaxRe = 1.41;
-	map->f.MinIm = -1.16;
-	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe)
+	map->f.min_re = -2.55;
+	map->f.max_re = 1.41;
+	map->f.min_im = -1.16;
+	map->f.max_im = map->f.min_im + (map->f.max_re - map->f.min_re)
 		* IMG_HEIGHT / IMG_WIDTH;
-	map->f.MaxIterations = 80;
+	map->f.max_iterations = 80;
 	map->fac.count = 1;
 	map->f.cr = 0;
 	map->f.ci = 0;
-	map->color.color_style = DEFUALT;
+	map->color.color_style = DEFAULT;
 }
 
 void	init_julia(t_mlx *map)
 {
-	map->f.MinRe = -4.24;
-	map->f.MaxRe = 2.81;
-	map->f.MinIm = -2.14;
-	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe)
+	map->f.min_re = -4.24;
+	map->f.max_re = 2.81;
+	map->f.min_im = -2.14;
+	map->f.max_im = map->f.min_im + (map->f.max_re - map->f.min_re)
 		* IMG_HEIGHT / IMG_WIDTH;
-	map->f.MaxIterations = 80;
+	map->f.max_iterations = 80;
 	map->fac.count = 1;
 	map->f.cr = -0.70176;
 	map->f.ci = -0.3842;
-	map->color.color_style = DEFUALT;
+	map->color.color_style = DEFAULT;
 }
 
 void	init_burningship(t_mlx *map)
 {
-	map->f.MinRe = -3.70;
-	map->f.MaxRe = 2.12;
-	map->f.MinIm = -1.60;
-	map->f.MaxIm = map->f.MinIm + (map->f.MaxRe - map->f.MinRe)
+	map->f.min_re = -3.70;
+	map->f.max_re = 2.12;
+	map->f.min_im = -1.60;
+	map->f.max_im = map->f.min_im + (map->f.max_re - map->f.min_re)
 		* IMG_HEIGHT / IMG_WIDTH;
-	map->f.MaxIterations = 80;
+	map->f.max_iterations = 80;
 	map->fac.count = 1;
 	map->f.cr = 0;
 	map->f.ci = 0;
-	map->color.color_style = DEFUALT;
+	map->color.color_style = DEFAULT;
 }
 
 void	init_var(t_mlx *map)
 {
-	map->f.c_re = map->f.MinRe + map->img.x * map->f.Re_factor;
+	map->f.c_re = map->f.min_re + map->img.x * map->f.re_factor;
 	map->f.z_re = map->f.c_re;
 	map->f.z_im = map->f.c_im;
-	map->f.isInside = 1;
+	map->f.is_inside = 1;
 	map->f.n = 0;
 }
 

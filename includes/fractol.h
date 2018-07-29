@@ -34,7 +34,7 @@
 
 # define DEFAULT 5
 # define STAR_DUST 6
-#	define BLOODY_HELL 7
+# define BLOODY_HELL 7
 # define CRAZY_MODE 8
 
 typedef struct	s_img
@@ -50,12 +50,12 @@ typedef struct	s_img
 
 typedef	struct	s_fractal
 {
-	double		MinRe;
-	double		MaxRe;
-	double		MinIm;
-	double		MaxIm;
-	double		Re_factor;
-	double		Im_factor;
+	double		min_re;
+	double		max_re;
+	double		min_im;
+	double		max_im;
+	double		re_factor;
+	double		im_factor;
 	double		c_re;
 	double		c_im;
 	double		z_re;
@@ -66,8 +66,8 @@ typedef	struct	s_fractal
 	double		ci;
 	double		real_diff;
 	double		img_diff;
-	int			isInside;
-	int			MaxIterations;
+	int			is_inside;
+	int			max_iterations;
 	int			n;
 }				t_fractal;
 
@@ -107,12 +107,12 @@ typedef struct	s_mlx
 	t_info		info;
 	int			trigger;
 	int			index;
-	int			total; //total pixels;
+	int			total;
 	char		*argv;
 	int			input;
 	int			animated;
 	int			menu;
-	int			freez;
+	int			freeze;
 }				t_mlx;
 
 /*
@@ -166,7 +166,7 @@ void			draw_ui(t_mlx *map);
 /*
 **  key_hook.c
 */
-
+void			color_style(int keycode, t_mlx *map);
 int				key_down(int keycode, t_mlx *map);
 void			key_move_fractal (int keycode, t_mlx *map);
 int				key_long_press(int keycode, t_mlx *map);
