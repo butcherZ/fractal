@@ -6,13 +6,14 @@
 /*   By: zyuan <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/07/27 07:09:24 by zyuan             #+#    #+#             */
-/*   Updated: 2018/07/30 00:17:54 by zyuan            ###   ########.fr       */
+/*   Updated: 2018/07/27 07:42:56 by zyuan            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "mlx.h"
 #include "fractol.h"
 #include "../libft/libft.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
